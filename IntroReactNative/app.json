@@ -1,0 +1,12 @@
+{
+  "name": "IntroReactNative",
+  "displayName": "IntroReactNative",
+  "expo": {
+    "name": "IntroReactNative",
+    "slug": "IntroReactNative",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
