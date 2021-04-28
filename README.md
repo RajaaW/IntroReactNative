@@ -1,2 +1,0 @@
-# IntroReactNative
-Epitech Project
