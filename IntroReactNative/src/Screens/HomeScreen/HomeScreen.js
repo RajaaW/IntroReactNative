@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import  ProfileScreen  from '../ProfileScreen/ProfileScreen'
+import userData from './userData.json'
 
 
 export default class HomeScreen extends React.Component {
@@ -17,7 +17,7 @@ export default class HomeScreen extends React.Component {
             <StatusBar style="auto" />
             <Button
                 title="Go to Details"
-                onPress={() => this.props.navigation.navigate('ProfileScreen')}
+                onPress={() => this.props.navigation.navigate('ProfileScreen', {userData})}
             />
         </View>
     );
