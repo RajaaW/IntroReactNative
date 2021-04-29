@@ -28,7 +28,8 @@ export default class RepoScreen extends React.Component {
         this.setState({ selectedIdIssue: item.id })
         // get issue info
         // move to another issue page and passing issue value in params
-        alert("go to page of the issue") 
+        this.props.navigation.navigate('IssueScreen', { issueData:item})
+       // alert("go to page of the issue") 
     }
     
     touchItemContributor = (item) => {
