@@ -81,7 +81,7 @@ export default class ProfileScreen extends React.Component {
                             source={{ uri: this.props.route.params.userData.avatar_url }}
                             style={{  width: 100, height: 100}}
                         />
-                        <Text>type:  { this.props.route.params.userData.type}</Text>
+                        <Text>type:  { this.props.route.params.userData.type}</Text> 
                         <Text>login: {this.props.route.params.userData.login}</Text>
                         <Text>repos: </Text>
                         <View   onStartShouldSetResponderCapture={() => {
