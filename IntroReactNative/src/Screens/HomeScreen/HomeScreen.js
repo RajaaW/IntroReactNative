@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import  ProfileScreen  from '../ProfileScreen/ProfileScreen'
+import  ApiScreen  from '../ApiScreen/ApiScreen'
 
 
 export default class HomeScreen extends React.Component {
@@ -18,6 +19,10 @@ export default class HomeScreen extends React.Component {
             <Button
                 title="Go to Details"
                 onPress={() => this.props.navigation.navigate('ProfileScreen')}
+            />
+            <Button
+                title="Go to Api"
+                onPress={() => this.props.navigation.navigate('ApiScreen')}
             />
         </View>
     );
