@@ -6,11 +6,21 @@ import  ApiScreen  from '../ApiScreen/ApiScreen'
 import userData from './userData.json'
 import repoData from './repoData.json'
 
+import {Api} from '../request'
+
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
+    
         
         super(props);
+
+    }
+
+    getUser = async () => {
+        const user = await Api.searchUser("octocat");
+        console.log("là", user)
+        this.props.navigation.navigate('ProfileScreen', {user});
     }
     
     render() {
@@ -20,7 +30,7 @@ export default class HomeScreen extends React.Component {
             <StatusBar style="auto" />
             <Button
                 title="Go to Profile"
-                onPress={() => this.props.navigation.navigate('ProfileScreen', {userData})}
+                onPress={() => this.getUser()}
             />
             <Button
                 title="Go to Repo"

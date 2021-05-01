@@ -1,12 +1,12 @@
 const searchUser = async (name) => {
-    fetch('https://api.github.com/users/'+name)
+    return fetch('https://api.github.com/users/'+name)
     .then(response => response.json())
-    .then( data => {return (data)})
-    .catch( error => console.error(error));
+        .then(data => { return (data)})
+        .catch(error => console.error(error));
 }
 
 const searchInUser = async (name) => {
-    fetch(`https://api.github.com/search/users?q=${name}+in:login`)
+    return fetch(`https://api.github.com/search/users?q=${name}+in:login`)
     .then(response => response.json())
     .then( data => {return (data)})
     .catch( error => console.error(error));
@@ -14,7 +14,7 @@ const searchInUser = async (name) => {
 
 const searchUserRepos = async (name) => {
     const tabs = []
-    fetch(`https://api.github.com/users/${name}/repos`)
+    return fetch(`https://api.github.com/users/${name}/repos`)
     .then(response => response.json())
     .then(data => {return (data)})
     .catch( error => console.error(error));
@@ -22,21 +22,21 @@ const searchUserRepos = async (name) => {
 
 
 const searchRepoIssus = async (name, repo) => {
-    fetch(`https://api.github.com/repos/${name}/${repo}/issues`)
+    return fetch(`https://api.github.com/repos/${name}/${repo}/issues`)
     .then(response => response.json())
     .then( data => {return (data)})
     .catch( error => console.error(error));
 }
 
 const searchUserFollowers = async (name) => {
-    fetch(`https://api.github.com/users/${name}/followers`)
+    return fetch(`https://api.github.com/users/${name}/followers`)
     .then(response => response.json())
     .then( data => {return (data)})
     .catch( error => console.error(error));
 }
 
 const searchUserRepo = async (name, repo) => {
-    fetch(`https://api.github.com/repos/${name}/${repo}`)
+    return fetch(`https://api.github.com/repos/${name}/${repo}`)
     .then(response => response.json())
     .then( data => {return (data)})
     .catch( error => console.error(error));
@@ -44,14 +44,7 @@ const searchUserRepo = async (name, repo) => {
 
 
 const searchRepoContributors = async (name, repo) => {
-    fetch(`https://api.github.com/repos/${name}/${repo}/contributors`)
-    .then(response => response.json())
-    .then( data => {return (data)})
-    .catch( error => console.error(error));
-}
-
-const searchUserParam = async (requete) => {
-    fetch(requete)
+    return fetch(`https://api.github.com/repos/${name}/${repo}/contributors`)
     .then(response => response.json())
     .then( data => {return (data)})
     .catch( error => console.error(error));
@@ -66,5 +59,4 @@ export const Api = {
     searchUserFollowers,
     searchUserRepo,
     searchRepoContributors,
-    searchUserParam
 };
