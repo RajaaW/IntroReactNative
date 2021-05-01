@@ -230,11 +230,12 @@ const styles = StyleSheet.create({
 
     flex_container: {
         overflow: "hidden",
-        backgroundColor: "#fff0fa",
+        //backgroundColor: "#fff0fa",
+        backgroundColor: "#fff",
         textAlign: "center",
         borderRadius: 50,
         position: "relative",
-        width: 400,
+        width: 390,
         marginBottom: 10,
         marginLeft: 1,
         shadowColor: "#000",
