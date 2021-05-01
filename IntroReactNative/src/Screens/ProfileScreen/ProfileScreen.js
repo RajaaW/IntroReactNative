@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, FlatList, Icon, TouchableOpacity  ,ScrollView, Text, View, Image,Dimensions  } from 'react-native';
+import { color } from 'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+
+            //open_issues //<span class="rad-menu-badge rad-bg-primary">23</span>
 const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
         <View style={styles.flex_container_item}>
@@ -9,6 +12,18 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         </View>
         
         <View style={styles.flex_container_item_icon}>
+            <View style={{
+                width: 25,
+                height: 25,
+                borderRadius: 100 / 2,
+                backgroundColor: "#db5ea1",
+                alignItems:"center",
+                fontSize: 3,
+                marginRight:20
+                
+            }}>
+                <Text style={{textColor:"#fff",color:"#fff",marginTop:2 }}>{item.open_issues > 999 ? "999" : item.open_issues}</Text>
+            </View>
             <Image source={{ uri: "https://image.flaticon.com/icons/png/128/748/748073.png" }}
                     style={styles.flex_icon_item} />
         </View>
@@ -179,6 +194,15 @@ const styles = StyleSheet.create({
         maxHeight: 200,
         marginTop:30,
         marginBottom: 30,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+        
+        borderRadius: 12,
         
         
     },
@@ -189,7 +213,9 @@ const styles = StyleSheet.create({
     flex_container_item_icon: {
         
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'row',
+        
     },
     item: {
         padding: 10,
@@ -278,7 +304,7 @@ const styles = StyleSheet.create({
         width: 17,
         height:19,
         alignSelf: "center",
-        
+        marginTop:5,
         marginBottom: 7,
     }
 });
