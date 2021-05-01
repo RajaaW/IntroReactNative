@@ -18,9 +18,8 @@ export default class HomeScreen extends React.Component {
     }
 
     getUser = async () => {
-        const user = await Api.searchUser("octocat");
-        console.log("là", user)
-        this.props.navigation.navigate('ProfileScreen', {user});
+        const userData = await Api.searchUser("CamilleWS");
+        this.props.navigation.navigate('ProfileScreen', {userData});
     }
     
     render() {

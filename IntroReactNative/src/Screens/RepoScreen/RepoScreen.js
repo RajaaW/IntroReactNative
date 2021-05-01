@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, FlatList, SafeAreaView, TouchableOpacity  ,ScrollView, Text, View, Image,Dimensions  } from 'react-native';
+import { Api } from '../request'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const ItemIssue = ({ item, onPress, backgroundColor, textColor }) => (
@@ -24,29 +25,57 @@ const ItemContributor = ({ item, onPress, backgroundColor, textColor }) => (
     </TouchableOpacity>
 )
 export default class RepoScreen extends React.Component {
-    touchItemIssue = (item) => {
+
+
+
+    searchByUrl = async (url) => {
+        try {
+            const rep = await Api.searchByUrl(url);
+            return rep
+        } catch (err) {
+            console.log("err", err)
+        }
+    }
+
+
+    componentDidMount() {
+
+        this.searchByUrl(this.props.route.params.repoData?.issues_url.split("{/number}")[0]).then((issues) => {
+            this.setState({ issues })
+        });
+        
+        this.searchByUrl(this.props.route.params.repoData?.contributors_url).then((contributors) => {
+            this.setState({ contributors })
+        })
+
+        this.setState({ loading: false })
+    }
+
+
+
+    touchItemIssue = async (item) => {
         this.setState({ selectedIdIssue: item.id })
-        // get issue info
-        // move to another issue page and passing issue value in params
-        this.props.navigation.navigate('IssueScreen', { issueData:item})
-       // alert("go to page of the issue") 
+        const issueData = await Api.searchIssue(this.props.route.params.repoData.owner.login,this.props.route.params.repoData.name, item.number )
+        this.props.navigation.navigate('IssueScreen', { issueData})
     }
     
-    touchItemContributor = (item) => {
+    touchItemContributor = async (item) => {
         this.setState({ selectedIdContributor: item.id })
-        // get user info
-        // move to another user page and passing user value in params
-        alert("go to page of the contributor")
+        
+        const userData = await Api.searchInUser(item.login)
+        console.log(userData)
+        this.props.navigation.push('ProfileScreen', { userData })
     }
     constructor(props) {
         super(props);
         
         this.state = {
+            loading: true,
             selectedIdIssue:null,
             selectedIdContributor: null,
 			enableScrollViewScroll: true,
-            issues: this.props.route.params.repoData?.issues_url,         // replace by request
-            contributors: this.props.route.params.repoData?.contributors_url, // replace by request
+            issues: null,         // replace by request
+            contributors: null, // replace by request
             
             // No need to touch renderIssue & renderContributor
             renderIssue : ({ item }) => {
@@ -81,6 +110,11 @@ export default class RepoScreen extends React.Component {
     
     //Name, is private, is a fork, description, size and default branch name
     render() {
+        if(this.state.loading) {
+            return (
+                <Text>Loading...</Text>
+            )
+        } 
         return (
             <View onStartShouldSetResponderCapture={() => {
           this.setState({ enableScrollViewScroll: true });
