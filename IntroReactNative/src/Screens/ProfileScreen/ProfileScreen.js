@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { StyleSheet, FlatList, Icon, TouchableOpacity  ,ScrollView, Text, View, Image,Dimensions  } from 'react-native';
-import { color } from 'react-native-reanimated';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -12,17 +11,8 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         </View>
         
         <View style={styles.flex_container_item_icon}>
-            <View style={{
-                width: 25,
-                height: 25,
-                borderRadius: 100 / 2,
-                backgroundColor: "#db5ea1",
-                alignItems:"center",
-                fontSize: 3,
-                marginRight:20
-                
-            }}>
-                <Text style={{textColor:"#fff",color:"#fff",marginTop:2 }}>{item.open_issues > 999 ? "999" : item.open_issues}</Text>
+            <View style={styles.flex_bubble_issues}>
+                <Text style={styles.flex_text_issues}>{item.open_issues > 999 ? "999" : item.open_issues}</Text>
             </View>
             <Image source={{ uri: "https://image.flaticon.com/icons/png/128/748/748073.png" }}
                     style={styles.flex_icon_item} />
@@ -102,9 +92,11 @@ export default class ProfileScreen extends React.Component {
     //Login, avatar and type 
     render() {
         return (
-            <View onStartShouldSetResponderCapture={() => {
-          this.setState({ enableScrollViewScroll: true });
-      }}>
+            <View
+                style={{backgroundColor:"#fff"}}
+                onStartShouldSetResponderCapture={() => {
+                this.setState({ enableScrollViewScroll: true });
+            }}>
                 <ScrollView scrollEnabled={this.state.enableScrollViewScroll}
                     ref={myScroll => (this._myScroll = myScroll)}
                     contentContainerStyle={this.state.content}>
@@ -117,7 +109,7 @@ export default class ProfileScreen extends React.Component {
                                 source={{ uri: this.props.route.params.userData.avatar_url }}
                                 style={styles.flex_img}
                             />
-                            <Text>
+                            <Text style={styles.flex_text_info}>
                                 <Text style={styles.flex_type}> {this.props.route.params.userData.type} </Text>
                                 <Text style={styles.flex_login}> {this.props.route.params.userData.login} </Text>
                             </Text>
@@ -134,7 +126,8 @@ export default class ProfileScreen extends React.Component {
 
 
 
-                        <Text>repos: </Text>
+                        <View style={styles.flex_container_list}>
+                        <Text style={styles.flex_text_list_title} > Repositories </Text>
                         <View   onStartShouldSetResponderCapture={() => {
                                     this.setState({ enableScrollViewScroll: false });
                                     if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
@@ -148,21 +141,24 @@ export default class ProfileScreen extends React.Component {
                                 extraData={this.state.selectedIdRepo}
                             />
                         </View>
+</View>
 
-                        <Text>followers: </Text>
-                        <View onStartShouldSetResponderCapture={() => {
-                                    this.setState({ enableScrollViewScroll: false });
-                                    if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
-                                        this.setState({ enableScrollViewScroll: true });
-                                    }}}
-                            style={styles.container}>
-                            <FlatList
-                            scrollEnabled={true}
-                                data={this.state.followers}
-                                renderItem={this.state.renderFollower}
-                                keyExtractor={(item) => item.id}
-                                extraData={this.state.selectedIdFollower}
-                            />
+                        <View style={styles.flex_container_list}>
+                            <Text style={styles.flex_text_list_title} >Followers </Text>
+                            <View onStartShouldSetResponderCapture={() => {
+                                        this.setState({ enableScrollViewScroll: false });
+                                        if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
+                                            this.setState({ enableScrollViewScroll: true });
+                                        }}}
+                                style={styles.container}>
+                                <FlatList
+                                scrollEnabled={true}
+                                    data={this.state.followers}
+                                    renderItem={this.state.renderFollower}
+                                    keyExtractor={(item) => item.id}
+                                    extraData={this.state.selectedIdFollower}
+                                />
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
@@ -234,12 +230,12 @@ const styles = StyleSheet.create({
 
     flex_container: {
         overflow: "hidden",
-        backgroundColor: "white",
+        backgroundColor: "#fff0fa",
         textAlign: "center",
-        borderRadius: 12,
+        borderRadius: 50,
         position: "relative",
-        width: 280,
-        marginBottom: 1,
+        width: 400,
+        marginBottom: 10,
         marginLeft: 1,
         shadowColor: "#000",
         shadowOffset: {
@@ -250,7 +246,38 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
 
         elevation: 8,
-        paddingTop:30,
+        paddingTop: 20,
+        paddingLeft: 30,
+        paddingRight:30,
+         borderBottomWidth:0,
+
+    },
+    flex_container_list: {
+        overflow: "hidden",
+        backgroundColor: "white",
+        //textAlign: "center",
+        borderRadius: 12,
+        //position: "relative",
+        
+        width: 300,
+        //marginBottom: 1,
+        //marginLeft: 1,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+
+        elevation: 8,
+        //paddingTop:30,
+        marginBottom:20,
+    },
+    flex_text_info: {
+
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     flex_bottom_info: {
@@ -289,7 +316,7 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         fontSize: 15,
         fontStyle: "italic",
-        color:"#3d76b8",
+        color:"#6e3b6e",
         marginBottom:15,
         marginTop:10
     },
@@ -306,5 +333,27 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop:5,
         marginBottom: 7,
-    }
+    },
+    flex_bubble_issues: {
+        width: 25,
+        height: 25,
+        borderRadius: 100 / 2,
+        backgroundColor: "#db5ea1",
+        alignItems:"center",
+        fontSize: 3,
+        marginRight:20
+        
+    },
+    flex_text_issues: {
+        color: "#fff",
+        marginTop: 2
+    },
+    flex_text_list_title: {
+        marginTop: 8,
+        alignSelf: "center",
+        fontSize: 18,
+        
+        fontWeight: "bold",
+        
+    },
 });
