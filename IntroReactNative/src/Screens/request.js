@@ -50,6 +50,13 @@ const searchRepoContributors = async (name, repo) => {
     .catch( error => console.error(error));
 }
 
+const searchUserParam = async (requete) => {
+    fetch(requete)
+    .then(response => response.json())
+    .then( data => {return (data)})
+    .catch( error => console.error(error));
+}
+
 
 export const Api = {
     searchUser,
@@ -59,4 +66,5 @@ export const Api = {
     searchUserFollowers,
     searchUserRepo,
     searchRepoContributors,
+    searchUserParam
 };
