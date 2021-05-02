@@ -15,7 +15,7 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         </View>
         
         <View style={styles.flex_container_item_icon}>
-            <View style={styles.flex_bubble_issues}>
+            <View style={(item.open_issues > 0) ? styles.flex_bubble_issues : {display:"none"}}>
                 <Text style={styles.flex_text_issues}>{item.open_issues > 999 ? "999" : item.open_issues}</Text>
             </View>
             <Image source={{ uri: "https://image.flaticon.com/icons/png/128/748/748073.png" }}

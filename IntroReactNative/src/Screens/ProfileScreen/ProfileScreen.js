@@ -12,7 +12,7 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         </View>
         
         <View style={styles.flex_container_item_icon}>
-            <View style={styles.flex_bubble_issues}>
+            <View style={(item.open_issues > 0) ? styles.flex_bubble_issues : {display:"none"}}>
                 <Text style={styles.flex_text_issues}>{item.open_issues > 999 ? "999" : item.open_issues}</Text>
             </View>
             <Image source={{ uri: "https://image.flaticon.com/icons/png/128/748/748073.png" }}
@@ -152,7 +152,7 @@ export default class ProfileScreen extends React.Component {
                                 <Text style={styles.flex_login}> {this.props.route.params.userData.login} </Text>
                             </Text>
                             <Text style={styles.flex_name}> {this.props.route.params.userData.name} </Text>
-                            <View style={styles.flex_bottom_info}>
+                            <View style={(this.props.route.params.userData.location) ? styles.flex_bottom_info : {display:"none"}}>
                                 <Image
                                     source={{ uri: "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png" }}
                                     style={styles.flex_icon}/>
