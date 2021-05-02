@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import  HomeScreen  from './src/Screens/HomeScreen/HomeScreen'
 import  ProfileScreen  from './src/Screens/ProfileScreen/ProfileScreen'
+import  ApiScreen  from './src/Screens/ApiScreen/ApiScreen'
 import  RepoScreen  from './src/Screens/RepoScreen/RepoScreen'
 import  IssueScreen  from './src/Screens/IssueScreen/IssueScreen'
 
@@ -18,6 +19,7 @@ export default function App() {
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+          <Stack.Screen name="ApiScreen" component={ApiScreen} />
           <Stack.Screen name="IssueScreen" component={IssueScreen} />
           <Stack.Screen name="RepoScreen" component={RepoScreen} />
           </>

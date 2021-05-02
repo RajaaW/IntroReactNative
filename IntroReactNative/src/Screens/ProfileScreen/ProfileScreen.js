@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, FlatList, Icon, TouchableOpacity  ,ScrollView, Text, View, Image,Dimensions  } from 'react-native';
+import { StyleSheet, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Text, View, Image, Dimensions } from 'react-native';
+import {Api} from '../request'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -37,28 +38,60 @@ const ItemFollower = ({ item, onPress, backgroundColor, textColor }) => (
     </TouchableOpacity>
 )
 export default class ProfileScreen extends React.Component {
-    touchItemRepo = (item) => {
+
+    searchByUrl = async (url) => {
+        try {
+            const rep = await Api.searchByUrl(url);
+            return rep
+        } catch (err) {
+            console.log("err", err)
+        }
+    }
+
+
+    componentDidMount() {
+
+        this.searchByUrl(this.props.route.params.userData?.repos_url).then((repos) => {
+            this.setState({ repos })
+        });
+        
+                
+        this.searchByUrl(this.props.route.params.userData?.followers_url).then((followers) => {
+            this.setState({ followers })
+        })
+
+        this.setState({ loading: false })
+    }
+        
+    
+
+    touchItemRepo = async (item) => {
         this.setState({ selectedIdRepo: item.id })
-        // get repo info
-        // move to another repo page and passing repo value in params
-        alert("go to page of the repo") 
+        const repoData = await Api.searchUserRepo(this.props.route.params.userData.login, item.name)
+        this.props.navigation.navigate('RepoScreen', {repoData})
     }
     
-    touchItemFollower = (item) => {
+    touchItemFollower = async (item) => {
         this.setState({ selectedIdFollower: item.id })
         // get user info
         // move to another user page and passing user value in params
-        alert("go to page of the follower")
+
+        const userData = await Api.searchInUser(item.login)
+        this.props.navigation.push('ProfileScreen', {userData})
+
     }
+    
+   
     constructor(props) {
         super(props);
         
         this.state = {
+            loading: true,
             selectedIdRepo:null,
             selectedIdFollower: null,
 			enableScrollViewScroll: true,
-            repos: this.props.route.params.userData?.repos_url,         // replace by request
-            followers: this.props.route.params.userData?.followers_url, // replace by request
+            repos: null,
+            followers: null,
             
             // No need to touch renderRepo & renderFollower
             renderRepo : ({ item }) => {
@@ -91,6 +124,11 @@ export default class ProfileScreen extends React.Component {
     
     //Login, avatar and type 
     render() {
+        if(this.state.loading) {
+            return (
+                <Text>Loading...</Text>
+            )
+        } 
         return (
             <View
                 style={{backgroundColor:"#fff"}}
@@ -250,7 +288,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 30,
         paddingRight:30,
-         borderBottomWidth:0,
+        borderBottomWidth:0,
 
     },
     flex_container_list: {
