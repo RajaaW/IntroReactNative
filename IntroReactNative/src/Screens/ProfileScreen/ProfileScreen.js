@@ -68,7 +68,7 @@ export default class ProfileScreen extends React.Component {
     touchItemRepo = async (item) => {
         this.setState({ selectedIdRepo: item.id })
         const repoData = await Api.searchUserRepo(this.props.route.params.userData.login, item.name)
-        this.props.navigation.navigate('RepoScreen', {repoData})
+        this.props.navigation.push('RepoScreen', {repoData})
     }
     
     touchItemFollower = async (item) => {

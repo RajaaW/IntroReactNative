@@ -13,6 +13,13 @@ const searchRepos = async (name) => {
 }
 
 
+const searchRepo = async (name) => {
+    return fetch('https://api.github.com/search/repositories?q='+name+'+in:name')
+    .then(response => response.json())
+        .then(data => { return (data?.items[0])})
+        .catch(error => console.error(error));
+}
+
 const searchUsers = async (name) => {
     return fetch(`https://api.github.com/search/users?q=${name}+in:login`)
     .then(response => response.json())
@@ -80,6 +87,7 @@ const searchByUrl = async (requete) => {
 export const Api = {
     searchUser,
     searchUsers,
+    searchRepo,
     searchRepos,
     searchInUser,
     searchUserRepos,

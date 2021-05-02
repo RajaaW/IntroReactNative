@@ -11,10 +11,16 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
         <View style={styles.flex_container_item}>
-            <Text style={[styles.title, textColor]}>{item.name}</Text>
+            <View style={{flexDirection: 'column'}}>
+                <Text style={[styles.title, textColor]}>{item.name}</Text>
+                <Text style={{
+        fontSize: 10,
+        fontVariant: ["small-caps"]}}> by {item.owner.login}</Text>
+            </View>
         </View>
         
         <View style={styles.flex_container_item_icon}>
+        
             <View style={(item.open_issues > 0) ? styles.flex_bubble_issues : {display:"none"}}>
                 <Text style={styles.flex_text_issues}>{item.open_issues > 999 ? "999" : item.open_issues}</Text>
             </View>
@@ -45,8 +51,8 @@ export default class HomeScreen extends React.Component {
     
     touchItemRepo = async (item) => {
         this.setState({ selectedIdRepo: item.id })
-        const repoData = await Api.searchUserRepo(this.props.route.params.userData.login, item.name)
-        this.props.navigation.navigate('RepoScreen', {repoData})
+        const repoData = await Api.searchUserRepo(item.owner.login, item.name)
+        this.props.navigation.push('RepoScreen', {repoData})
     }
     
     touchItemUsers = async (item) => {
@@ -279,7 +285,8 @@ const styles = StyleSheet.create({
     item: {
         padding: 10,
         fontSize: 16,
-        height: 44,
+       // minHeight: 44,
+        height: "auto",
         
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -289,6 +296,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 15,
+        fontWeight: "bold",
     },
 
     flex_container: {
