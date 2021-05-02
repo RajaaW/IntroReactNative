@@ -5,7 +5,20 @@ const searchUser = async (name) => {
         .catch(error => console.error(error));
 }
 
+const searchRepos = async (name) => {
+    return fetch('https://api.github.com/search/repositories?q='+name+'+in:name')
+    .then(response => response.json())
+        .then(data => { return (data?.items)})
+        .catch(error => console.error(error));
+}
 
+
+const searchUsers = async (name) => {
+    return fetch(`https://api.github.com/search/users?q=${name}+in:login`)
+    .then(response => response.json())
+        .then(data => {return (data?.items)})
+    .catch( error => console.error(error));
+}
 const searchInUser = async (name) => {
     return fetch(`https://api.github.com/search/users?q=${name}+in:login`)
     .then(response => response.json())
@@ -66,6 +79,8 @@ const searchByUrl = async (requete) => {
 
 export const Api = {
     searchUser,
+    searchUsers,
+    searchRepos,
     searchInUser,
     searchUserRepos,
     searchRepoIssues,
