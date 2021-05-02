@@ -1,7 +1,7 @@
 //import * as React from 'react';
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Button, View, Text, StyleSheet, TextInput, Image, TouchableOpacity   } from 'react-native';
+import { Button, View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView,FlatList   } from 'react-native';
 import repoData from './repoData.json'
 
 import {Api} from '../request'
@@ -13,20 +13,22 @@ export default class HomeScreen extends React.Component {
 
         this.state = {
             text: "",
+            oldText: "",
             pressed: false,
+            users: null,
+            repos:null,
         }
 
     }
 
     setResearch = (text) => {
         this.setState({ text })
-        
         this.setState({pressed: false})
     }
 
     getSearch = () => {
         console.log(this.state.text)
-        this.setState({pressed: true})
+        this.setState({pressed: true, oldText:this.state.text})
     }
     getUser = async () => {
         const userData = await Api.searchUser("CamilleWS");
@@ -53,9 +55,23 @@ export default class HomeScreen extends React.Component {
                         style={this.state.pressed ? styles.search_text_btn_pressed : styles.search_text_btn}>
                         Go</Text> */}
                 </TouchableOpacity>
-                <View>
+                <Text style={this.state.oldText ? styles.text_result : ''}>
+                    <Text>Result for </Text>
+                    <Text style={{fontWeight: "bold", color:"#6e3b6e"}}>{this.state.oldText}</Text>
+                    <Text> :</Text>
+                </Text>
+                <View style={styles.container_result}>
                     
+                    <ScrollView>
+                        
+                    </ScrollView>
                 </View>
+
+                
+
+
+
+
 
             {/* <Text>Open up homeScreen.js to start working on your app!</Text>
             <StatusBar style="auto" />
@@ -144,5 +160,27 @@ const styles = StyleSheet.create({
     search_text_btn_pressed: {
         fontSize: 16,
         color: "#fff",
-    }
+    },
+    text_result: {
+        position: 'absolute',
+        top: 75,
+        left:30,
+    },
+    container_result: {
+        backgroundColor: "#fff",
+        position: 'absolute',
+        width: "90%",
+        height: "84%",
+        top: 100,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        borderRadius: 10,
+        
+    },
 });
