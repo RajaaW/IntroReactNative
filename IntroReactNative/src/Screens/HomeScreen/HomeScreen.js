@@ -15,10 +15,23 @@ export default class HomeScreen extends React.Component {
             text: "",
             oldText: "",
             pressed: false,
+            repoSelected: true,
             users: null,
             repos:null,
         }
 
+    }
+
+    selectTab = (tabSelected) => {
+        switch (tabSelected) {
+            case "Repositories":
+                this.setState({repoSelected:true})
+                break;
+        
+            default:
+                this.setState({repoSelected:false})
+                break;
+        }
     }
 
     setResearch = (text) => {
@@ -61,7 +74,20 @@ export default class HomeScreen extends React.Component {
                     <Text> :</Text>
                 </Text>
                 <View style={styles.container_result}>
-                    
+                    <View style={styles.tabs_btn_container}>
+                        <TouchableOpacity
+                            style={this.state.repoSelected ? styles.tabs_btn_selected : styles.tabs_btn}
+                            onPress={() => this.selectTab("Repositories")}>
+                            <Text style={{color:"#fff", fontSize:20}}> Repositories </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.state.repoSelected ? styles.tabs_btn : styles.tabs_btn_selected}
+                            onPress={() => this.selectTab("Users")}>
+                            <Text  style={{color:"#fff", fontSize:20}}> Users </Text>
+                        </TouchableOpacity>
+                    </View>
+
+
                     <ScrollView>
                         
                     </ScrollView>
@@ -167,6 +193,7 @@ const styles = StyleSheet.create({
         left:30,
     },
     container_result: {
+        
         backgroundColor: "#fff",
         position: 'absolute',
         width: "90%",
@@ -181,6 +208,30 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         borderRadius: 10,
-        
     },
+    tabs_btn_container: {
+        flexDirection: "row",
+        alignItems: "flex-start",
+        width: "100%",
+    },
+    tabs_btn_selected: {
+        minWidth: "50%",
+        height: 40,
+        backgroundColor: "#6e3b6e",
+        alignItems:"center",
+        justifyContent: 'center',
+        fontSize: 30,
+        borderTopLeftRadius:12,
+        borderTopRightRadius:12,
+    },
+    tabs_btn: {
+        minWidth: "50%",
+        height: 40,
+        backgroundColor: "grey",
+        alignItems:"center",
+        justifyContent: 'center',
+        fontSize:30,
+        borderTopLeftRadius:12,
+        borderTopRightRadius:12,
+    }
 });
