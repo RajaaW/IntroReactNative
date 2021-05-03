@@ -121,7 +121,7 @@ export default class ProfileScreen extends React.Component {
         }
     }
 
-    loading = () => {
+    loadingList = () => {
             return (
                 <Image
                     style={{ width: 100, height:100, alignSelf:"center"}}
@@ -136,7 +136,12 @@ export default class ProfileScreen extends React.Component {
     render() {
         if(this.state.loading) {
             return (
-                <Text>Loading...</Text>
+                <Image
+                    style={{ width: 300, height:200}}
+                        //source={{ uri: "https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" }} />
+                        source={{ uri: "https://cdn.dribbble.com/users/1133112/screenshots/3164394/__.gif" }} />
+                    
+            
             )
         } 
         return (
@@ -191,7 +196,7 @@ export default class ProfileScreen extends React.Component {
                                     />
                                 </View>
                             ) : (
-                                this.loading()
+                                this.loadingList()
                             )}
                         </View>
 
@@ -213,7 +218,7 @@ export default class ProfileScreen extends React.Component {
                                     />
                                 </View>
                             ) : (
-                                this.loading()
+                                this.loadingList()
                             )}
                         </View>
                     </View>
