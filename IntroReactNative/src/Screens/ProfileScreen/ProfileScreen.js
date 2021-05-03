@@ -121,6 +121,16 @@ export default class ProfileScreen extends React.Component {
         }
     }
 
+    loading = () => {
+            return (
+                <Image
+                    style={{ width: 100, height:100, alignSelf:"center"}}
+                        source={{ uri: "https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" }} />
+                        //source={{ uri: "https://cdn.dribbble.com/users/1133112/screenshots/3164394/__.gif" }} />
+                    
+            )
+    }
+
     
     //Login, avatar and type 
     render() {
@@ -165,38 +175,46 @@ export default class ProfileScreen extends React.Component {
 
 
                         <View style={styles.flex_container_list}>
-                        <Text style={styles.flex_text_list_title} > Repositories </Text>
-                        <View   onStartShouldSetResponderCapture={() => {
+                            <Text style={styles.flex_text_list_title} > Repositories </Text>
+                            {(this.state.repos) ? (
+                                <View   onStartShouldSetResponderCapture={() => {
                                     this.setState({ enableScrollViewScroll: false });
                                     if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
                                         this.setState({ enableScrollViewScroll: true });
                                     }}}
-                            style={styles.container}>
-                            <FlatList
-                                data={this.state.repos}
-                                renderItem={this.state.renderRepo}
-                                keyExtractor={(item) => item.id}
-                                extraData={this.state.selectedIdRepo}
-                            />
+                                    style={styles.container}>
+                                    <FlatList
+                                        data={this.state.repos}
+                                        renderItem={this.state.renderRepo}
+                                        keyExtractor={(item) => item.id}
+                                        extraData={this.state.selectedIdRepo}
+                                    />
+                                </View>
+                            ) : (
+                                this.loading()
+                            )}
                         </View>
-</View>
 
                         <View style={styles.flex_container_list}>
                             <Text style={styles.flex_text_list_title} >Followers </Text>
-                            <View onStartShouldSetResponderCapture={() => {
-                                        this.setState({ enableScrollViewScroll: false });
-                                        if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
-                                            this.setState({ enableScrollViewScroll: true });
-                                        }}}
-                                style={styles.container}>
-                                <FlatList
-                                scrollEnabled={true}
-                                    data={this.state.followers}
-                                    renderItem={this.state.renderFollower}
-                                    keyExtractor={(item) => item.id}
-                                    extraData={this.state.selectedIdFollower}
-                                />
-                            </View>
+                            {(this.state.followers) ? (
+                                <View onStartShouldSetResponderCapture={() => {
+                                            this.setState({ enableScrollViewScroll: false });
+                                            if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
+                                                this.setState({ enableScrollViewScroll: true });
+                                            }}}
+                                    style={styles.container}>
+                                    <FlatList
+                                    scrollEnabled={true}
+                                        data={this.state.followers}
+                                        renderItem={this.state.renderFollower}
+                                        keyExtractor={(item) => item.id}
+                                        extraData={this.state.selectedIdFollower}
+                                    />
+                                </View>
+                            ) : (
+                                this.loading()
+                            )}
                         </View>
                     </View>
                 </ScrollView>
@@ -316,7 +334,8 @@ const styles = StyleSheet.create({
     flex_text_info: {
 
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        alignSelf: "center",
     },
 
     flex_bottom_info: {
