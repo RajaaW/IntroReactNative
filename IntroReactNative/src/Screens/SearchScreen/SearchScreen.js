@@ -47,6 +47,45 @@ const ItemUsers = ({ item, onPress, backgroundColor, textColor }) => (
     </TouchableOpacity>
 )
 
+const SearchResult = ({ state , selectTab }) => (
+    
+                    <View style={styles.container_result}>
+                        <View style={styles.tabs_btn_container}>
+                            <TouchableOpacity
+                                style={state.repoSelected ? styles.tabs_btn_selected : styles.tabs_btn}
+                                onPress={() => selectTab("Repositories")}>
+                                <Text style={{ color: "#fff", fontSize: 20 }}> Repositories </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={state.repoSelected ? styles.tabs_btn : styles.tabs_btn_selected}
+                                onPress={() => selectTab("Users")}>
+                                <Text style={{ color: "#fff", fontSize: 20 }}> Users </Text>
+                            </TouchableOpacity>
+                        </View>
+
+
+                        <ScrollView style={state.repoSelected ? '' : {display:"none"} }>
+                            <FlatList
+                                data={state.repos}
+                                renderItem={state.renderRepo}
+                                keyExtractor={(item) => item.id}
+                                extraData={state.selectedIdRepo}
+                            />
+                        
+                        </ScrollView>
+                        <ScrollView style={state.repoSelected ? {display:"none"} : "" }>
+                            <FlatList
+                                data={state.users}
+                                renderItem={state.renderUsers}
+                                keyExtractor={(item) => item.id}
+                                extraData={state.selectedIdUsers}
+                            />
+                        
+                        </ScrollView>
+                    </View>
+
+)
+
 export default class SearchScreen extends React.Component {
     
     touchItemRepo = async (item) => {
@@ -72,8 +111,8 @@ export default class SearchScreen extends React.Component {
             text: "",
             oldText: "",
             pressed: false,
+            loading: false,
             repoSelected: true,
-            loading: true,
             selectedIdRepo:null,
             selectedIdUsers: null,
             users: null,
@@ -125,7 +164,6 @@ export default class SearchScreen extends React.Component {
     }
 
     getSearch = async () => {
-        console.log(this.state.text)
         try {
             const users = await Api.searchUsers(this.state.text);
             const repos = await Api.searchRepos(this.state.text);
@@ -135,6 +173,7 @@ export default class SearchScreen extends React.Component {
 
         this.setState({
             pressed: true,
+            loading: false,
             oldText: this.state.text,
             users:users,
             repos:repos
@@ -149,6 +188,19 @@ export default class SearchScreen extends React.Component {
         const userData = await Api.searchUser("CamilleWS");
         this.props.navigation.navigate('ProfileScreen', {userData});
     }
+
+    loader = () => {
+        if (this.state.loading) {
+            return (
+                <Image
+                    style={{ width: 300, height:200}}
+                        //source={{ uri: "https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" }} />
+                        source={{ uri: "https://cdn.dribbble.com/users/1133112/screenshots/3164394/__.gif" }} />
+                    
+            )
+        }
+        return (null)
+    }
     
     render() {
         
@@ -162,7 +214,7 @@ export default class SearchScreen extends React.Component {
                 ></TextInput>
                 <TouchableOpacity
                     style={this.state.pressed ? styles.search_btn_pressed : styles.search_btn}
-                    onPress={() => this.getSearch()}>
+                    onPress={() => { this.setState({ loading: true }); this.getSearch()}}>
                     <Image
                         style={this.state.pressed ? styles.icon_pressed : styles.icon}
                         source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/1200px-Magnifying_glass_icon.svg.png" }} />
@@ -175,61 +227,17 @@ export default class SearchScreen extends React.Component {
                     <Text style={{fontWeight: "bold", color:"#6e3b6e"}}>{this.state.oldText}</Text>
                     <Text> :</Text>
                 </Text>
+
                 {(this.state.oldText) ?(
+                    <SearchResult
+                        state={this.state}
+                        selectTab = {this.selectTab}
+                    />
+
+                ) : (
+                    this.loader()
+                )}
                     
-                    <View style={styles.container_result}>
-                        <View style={styles.tabs_btn_container}>
-                            <TouchableOpacity
-                                style={this.state.repoSelected ? styles.tabs_btn_selected : styles.tabs_btn}
-                                onPress={() => this.selectTab("Repositories")}>
-                                <Text style={{ color: "#fff", fontSize: 20 }}> Repositories </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={this.state.repoSelected ? styles.tabs_btn : styles.tabs_btn_selected}
-                                onPress={() => this.selectTab("Users")}>
-                                <Text style={{ color: "#fff", fontSize: 20 }}> Users </Text>
-                            </TouchableOpacity>
-                        </View>
-
-
-                        <ScrollView style={this.state.repoSelected ? '' : {display:"none"} }>
-                            <FlatList
-                                data={this.state.repos}
-                                renderItem={this.state.renderRepo}
-                                keyExtractor={(item) => item.id}
-                                extraData={this.state.selectedIdRepo}
-                            />
-                        
-                        </ScrollView>
-                        <ScrollView style={this.state.repoSelected ? {display:"none"} : "" }>
-                            <FlatList
-                                data={this.state.users}
-                                renderItem={this.state.renderUsers}
-                                keyExtractor={(item) => item.id}
-                                extraData={this.state.selectedIdUsers}
-                            />
-                        
-                        </ScrollView>
-                    </View>
-
-
-
-                    ) : (null)}
-
-            {/* <Text>Open up homeScreen.js to start working on your app!</Text>
-            <StatusBar style="auto" />
-            <Button
-                title="Go to Profile"
-                onPress={() => this.getUser()}
-            />
-            <Button
-                title="Go to Repo"
-                onPress={() => this.props.navigation.navigate('RepoScreen', {repoData})}
-            />
-            <Button
-                title="Go to Api"
-                onPress={() => this.props.navigation.navigate('ApiScreen')}
-            /> */}
         </View>
     );
     }
