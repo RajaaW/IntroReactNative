@@ -1,6 +1,11 @@
 import React from 'react';
 import {  View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {Store} from "../storage"
+import * as React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { Button, View, Text, StyleSheet } from 'react-native';
+import  ProfileScreen  from '../ProfileScreen/ProfileScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
