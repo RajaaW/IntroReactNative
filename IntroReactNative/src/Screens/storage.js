@@ -82,7 +82,6 @@ const delRepo = async (repo) => {
     const tab = getRepos()
     tab = tab.filter(item => item.full_name !== repo.full_name)
 
-
     try {
       await AsyncStorage.setItem(
         'repos',
@@ -96,13 +95,14 @@ const delRepo = async (repo) => {
 const delUser = async (user) => {
   var tab = await getUsers()
   tab = JSON.parse(tab)
-  var ntab = tab.filter(item => console.log(item.login, user))
+  var ntab = tab.filter(item => item.login !== user)
 
     try {
       await AsyncStorage.setItem(
         'users',
         JSON.stringify(ntab)
       );
+      console.log(ntab)
     } catch (error) {
       console.log("bad fav user del")
     }
