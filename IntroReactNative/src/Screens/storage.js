@@ -7,7 +7,7 @@ const initUsers = async () => {
         JSON.stringify([])
       );
     } catch (error) {
-      console.log("bad fav users init", error)
+      alert("Bad Users favorites initialisation")
     }
 };
 
@@ -18,7 +18,7 @@ const initRepos = async () => {
         JSON.stringify([])
       );
     } catch (error) {
-      console.log("bad fav repos init", error)
+      alert("Bad repositories favorites initialisation")
     }
 };
 
@@ -30,7 +30,9 @@ const getUsers = async () => {
     if (value !== null) {
       a = value;
     }
-  } catch (error) {}
+  } catch (error) {
+    alert("Bad Getting Users favorites")
+  }
   return a
 };
 
@@ -41,7 +43,9 @@ const getRepos = async () => {
     if (value !== null) {
       a = value;
     }
-  } catch (error) {}
+  } catch (error) {
+    alert("Bad Getting repositories favorites")
+  }
   return a
 };
 
@@ -58,14 +62,14 @@ const addUser = async (user) => {
       );
       console.log(tab)
     } catch (error) {
-      console.log("bad fav users add")
+      alert("Bad adding Users in favorites")
     }
 };
 
 const addRepo = async (repo) => {
   var tab = await getUsers()
   tab = JSON.parse(tab)
-  tab.push(user)
+  tab.push(repo)
 
   try {
     await AsyncStorage.setItem(
@@ -74,21 +78,22 @@ const addRepo = async (repo) => {
     );
     console.log(tab)
   } catch (error) {
-    console.log("bad fav repos add")
+    alert("Bad adding repositories favorites")
   }
 };
 
 const delRepo = async (repo) => {
     const tab = getRepos()
-    tab = tab.filter(item => item.full_name !== repo.full_name)
+    tab = JSON.parse(tab)
+    var ntab = tab.filter(item => item.full_name !== repo)
 
     try {
       await AsyncStorage.setItem(
         'repos',
-        JSON.stringify(tab)
+        JSON.stringify(ntab)
       );
     } catch (error) {
-      console.log("bad fav repo del")
+      alert("Bad deleting Repositories favorites")
     }
 };
 
@@ -102,9 +107,8 @@ const delUser = async (user) => {
         'users',
         JSON.stringify(ntab)
       );
-      console.log(ntab)
     } catch (error) {
-      console.log("bad fav user del")
+      alert("Bad deleting Users favorites")
     }
 };
 
