@@ -1,11 +1,17 @@
 import React from 'react';
 import {  View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {Store} from "../storage"
 
 
 
 export default class HomeScreen extends React.Component {
 
     constructor(props) {super(props)}
+
+    componentDidMount() {
+        Store.initRepos()
+        Store.initUsers()
+    }
 
     render() {
         
@@ -39,8 +45,14 @@ export default class HomeScreen extends React.Component {
                 <TouchableOpacity
                     style={styles.start}
                     onPress={() => this.props.navigation.navigate('Search')}>
-                    <Text style={styles.start_txt}>  START</Text>
+                    <Text style={styles.start_txt}>  SEARCH</Text>
                 </TouchableOpacity>
+
+                {/* <TouchableOpacity
+                    style={styles.start}
+                    onPress={() => this.props.navigation.navigate('FavScreen')}>
+                    <Text style={styles.start_txt}>  FAV</Text>
+                </TouchableOpacity> */}
             </View>
     );
     }
@@ -103,7 +115,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.44,
         shadowRadius: 10.32,
         elevation: 16,
-        borderRadius:10
+        borderRadius:10,
     },
     start_txt: {
         fontVariant: ["small-caps"],

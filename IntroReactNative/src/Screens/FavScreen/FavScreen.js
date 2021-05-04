@@ -5,6 +5,7 @@ import { Button, View, Text, StyleSheet, TextInput, Image, TouchableOpacity, Scr
 
 
 import {Api} from '../request'
+import {Store} from '../storage'
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
@@ -108,17 +109,12 @@ export default class SearchScreen extends React.Component {
         super(props);
 
         this.state = {
-            text: "",
-            oldText: "",
-            pressed: false,
-            loading: false,
             repoSelected: true,
             selectedIdRepo:null,
             selectedIdUsers: null,
             users: null,
             repos:null,
 
-            
             renderRepo : ({ item }) => {
                 const backgroundColor = item.id === this.state.selectedIdRepo ? "#6e3b6e" : "#ffffff";
                 const color = item.id === this.state.selectedIdRepo ? 'white' : 'black';
@@ -159,23 +155,12 @@ export default class SearchScreen extends React.Component {
         }
     }
 
-    setResearch = (text) => {
-        this.setState({ text })
-        this.setState({pressed: false})
-    }
-
     getSearch = async () => {
         try {
-            const users = await Api.searchUsers(this.state.text);
-            const repos = await Api.searchRepos(this.state.text);
-
-            // const rep = await Api.searchByUrl(url);
-            // return rep
+            const users = await Store.getUsers();
+            const repos = await Store.getRepos();
 
         this.setState({
-            pressed: true,
-            loading: false,
-            oldText: this.state.text,
             users:users,
             repos:repos
         })
@@ -185,59 +170,19 @@ export default class SearchScreen extends React.Component {
         }
 
     }
-    getUser = async () => {
-        const userData = await Api.searchUser("CamilleWS");
-        this.props.navigation.navigate('ProfileScreen', {userData});
-    }
 
-    loader = () => {
-        if (this.state.loading) {
-            return (
-                <Image
-                    style={{ width: 300, height:200}}
-                        //source={{ uri: "https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" }} />
-                        source={{ uri: "https://cdn.dribbble.com/users/1133112/screenshots/3164394/__.gif" }} />
-                    
-            )
-        }
-        return (null)
-    }
     
     render() {
         
         return (
             <View style={styles.container}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Search..."
-                    onChangeText={text => this.setResearch(text)}
-                    defaultValue={this.state.text}
-                ></TextInput>
-                <TouchableOpacity
-                    style={this.state.pressed ? styles.search_btn_pressed : styles.search_btn}
-                    onPress={() => { this.setState({ loading: true }); this.getSearch()}}>
-                    <Image
-                        style={this.state.pressed ? styles.icon_pressed : styles.icon}
-                        source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/1200px-Magnifying_glass_icon.svg.png" }} />
-                    {/* <Text
-                        style={this.state.pressed ? styles.search_text_btn_pressed : styles.search_text_btn}>
-                        Go</Text> */}
-                </TouchableOpacity>
-                <Text style={this.state.oldText ? styles.text_result : {display:"none"}}>
-                    <Text>Result for </Text>
-                    <Text style={{fontWeight: "bold", color:"#6e3b6e"}}>{this.state.oldText}</Text>
-                    <Text> :</Text>
+                <Text style={styles.text_result}>
+                    <Text>Favoris </Text>
                 </Text>
-
-                {(this.state.oldText) ?(
-                    <SearchResult
+                <SearchResult
                         state={this.state}
                         selectTab = {this.selectTab}
                     />
-
-                ) : (
-                    this.loader()
-                )}
                     
         </View>
     );
@@ -459,13 +404,6 @@ const styles = StyleSheet.create({
         position: "relative",
         tintColor: "black",
     },
-    icon_pressed: {
-        width: 20,
-        height:20,
-        alignSelf: "center",
-        position: "relative",
-        tintColor: "#fff",
-    },
     search_btn: {
         backgroundColor: "#ffbde1",
         borderColor:"#6e3b6e",
@@ -482,27 +420,9 @@ const styles = StyleSheet.create({
         right:10,
         padding:8
     },
-    search_btn_pressed: {
-        backgroundColor: "#6e3b6e",
-        flex: 1,
-        flexDirection: 'row',
-        maxWidth: 120,
-        maxHeight: 40,
-        padding: 5,
-        borderRadius: 25,
-        margin: 12,
-        position: 'absolute',
-        top: 12,
-        right:10,
-        padding:8
-    },
     search_text_btn: {
         fontSize: 16,
         color:"black"
-    },
-    search_text_btn_pressed: {
-        fontSize: 16,
-        color: "#fff",
     },
     text_result: {
         position: 'absolute',

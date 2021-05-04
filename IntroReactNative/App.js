@@ -9,6 +9,7 @@ import  ProfileScreen  from './src/Screens/ProfileScreen/ProfileScreen'
 import  ApiScreen  from './src/Screens/ApiScreen/ApiScreen'
 import  RepoScreen  from './src/Screens/RepoScreen/RepoScreen'
 import  IssueScreen  from './src/Screens/IssueScreen/IssueScreen'
+import  FavScreen  from './src/Screens/FavScreen/FavScreen'
 
 
 const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ export default function App() {
           <Stack.Screen name="ApiScreen" component={ApiScreen} />
           <Stack.Screen name="IssueScreen" component={IssueScreen} />
           <Stack.Screen name="RepoScreen" component={RepoScreen} />
+          <Stack.Screen name="FavScreen" component={FavScreen} />
           </>
       </Stack.Navigator>
     </NavigationContainer>

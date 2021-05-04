@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Text, View, Image, Dimensions } from 'react-native';
 import {Api} from '../request'
+import { Store } from "../storage";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -80,6 +81,17 @@ export default class ProfileScreen extends React.Component {
         this.props.navigation.push('ProfileScreen', {userData})
 
     }
+
+    changeFavProfil = async () => {
+        if (this.state.fav) {
+            Store.delUser(this.props.route.params.userData.login)
+            this.setState({fav: false})
+        }
+        else {
+            Store.addUser(this.props.route.params.userData)
+            this.setState({fav: true})
+        }
+    }
     
    
     constructor(props) {
@@ -92,6 +104,7 @@ export default class ProfileScreen extends React.Component {
 			enableScrollViewScroll: true,
             repos: null,
             followers: null,
+            fav: false,
             
             // No need to touch renderRepo & renderFollower
             renderRepo : ({ item }) => {
@@ -128,7 +141,8 @@ export default class ProfileScreen extends React.Component {
             return (
                 <Text>Loading...</Text>
             )
-        } 
+        }
+        // {console.log(this.props.route.params.userData)}
         return (
             <View
                 style={{backgroundColor:"#fff"}}
@@ -152,6 +166,14 @@ export default class ProfileScreen extends React.Component {
                                 <Text style={styles.flex_login}> {this.props.route.params.userData.login} </Text>
                             </Text>
                             <Text style={styles.flex_name}> {this.props.route.params.userData.name} </Text>
+                            <TouchableOpacity
+                                style={this.state.pressed ? styles.search_btn_pressed : styles.search_btn}
+                                onPress={() => { this.changeFavProfil()}}>
+                                <Image
+                                style={this.state.fav ? styles.icon_fav : styles.icon_unfav}
+                                source={this.state.fav ? require('../../../assets/like.png') : require('../../../assets/unlike.png')} />
+                            </TouchableOpacity>
+     
                             <View style={(this.props.route.params.userData.location) ? styles.flex_bottom_info : {display:"none"}}>
                                 <Image
                                     source={{ uri: "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png" }}
@@ -393,6 +415,35 @@ const styles = StyleSheet.create({
         fontSize: 18,
         
         fontWeight: "bold",
-        
+    },
+    search_btn: {
+        backgroundColor: "#ffbde1",
+        borderColor:"#6e3b6e",
+        flex: 1,
+        flexDirection: 'row',
+        maxWidth: 120,
+        maxHeight: 40,
+        padding: 5,
+        borderRadius: 25,
+        borderWidth: 1,
+        margin: 12,
+        position: 'absolute',
+        top: 12,
+        right:10,
+        padding:8
+    },
+    search_btn_pressed: {
+        backgroundColor: "#6e3b6e",
+        flex: 1,
+        flexDirection: 'row',
+        maxWidth: 120,
+        maxHeight: 40,
+        padding: 5,
+        borderRadius: 25,
+        margin: 12,
+        position: 'absolute',
+        top: 12,
+        right:10,
+        padding:8
     },
 });
