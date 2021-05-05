@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList ,Dimensions  } from 'react-native';
+import {Store} from "../storage"
 
 
 import {Api} from '../request'
@@ -185,10 +186,6 @@ export default class SearchScreen extends React.Component {
         }
 
     }
-    getUser = async () => {
-        const userData = await Api.searchUser("CamilleWS");
-        this.props.navigation.navigate('ProfileScreen', {userData});
-    }
 
     loader = () => {
         if (this.state.loading) {
@@ -207,6 +204,14 @@ export default class SearchScreen extends React.Component {
         
         return (
             <View style={styles.container}>
+            
+                <TouchableOpacity
+                    style={styles.fav_btn}
+                    onPress={() => this.props.navigation.navigate('FavScreen')}>
+                    <Image
+                        style={ styles.icon_fav}
+                        source={{ uri: "https://cdn.iconscout.com/icon/free/png-256/heart-56-76703.png" }} />
+                </TouchableOpacity>
                 <TextInput
                     style={styles.input}
                     placeholder="Search..."
@@ -441,9 +446,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    fav_btn: {
+        height: 40,
+        // minWidth:"60%",
+        // margin: 12,
+        // borderWidth: 1,
+        // borderRightColor: "#6e3b6e",
+        // borderColor:"#6e3b6e",
+        // borderRadius: 12,
+        padding: 10,
+        position: 'absolute',
+        top: 0,
+        left:0
+    },
+    icon_fav: {
+        width: 55,
+        height:55,
+        alignSelf: "center",
+        position: "relative",
+    },
     input: {
         height: 40,
-        minWidth:"75%",
+        minWidth:"60%",
         margin: 12,
         borderWidth: 1,
         borderRightColor: "#6e3b6e",
@@ -452,7 +476,7 @@ const styles = StyleSheet.create({
         padding: 10,
         position: 'absolute',
         top: 10,
-        left:10
+        left:70
     },
     icon: {
         width: 20,

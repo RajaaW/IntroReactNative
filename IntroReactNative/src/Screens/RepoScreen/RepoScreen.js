@@ -80,12 +80,13 @@ export default class RepoScreen extends React.Component {
         super(props);
         
         this.state = {
+            fav: false,
             loading: true,
             selectedIdIssue:null,
             selectedIdContributor: null,
 			enableScrollViewScroll: true,
-            issues: null,         // replace by request
-            contributors: null, // replace by request
+            issues: null,         
+            contributors: null, 
             
             // No need to touch renderIssue & renderContributor
             renderIssue : ({ item }) => {
@@ -118,6 +119,7 @@ export default class RepoScreen extends React.Component {
         }
        // console.log(this.props.route.params.repoData)
     }
+    
 
     loadingList = () => {
             return (
@@ -128,6 +130,19 @@ export default class RepoScreen extends React.Component {
                     
             )
     }
+
+
+    changeFavRepo = async () => {
+        if (this.state.fav) {
+            Store.delRepo(this.props.route.params.repoData.name)
+            this.setState({fav: false})
+        }
+        else {
+            Store.addRepo(this.props.route.params.repoData)
+            this.setState({fav: true})
+        }
+    }
+
     //Name, is private, is a fork, description, size and default branch name
     render() {
         if(this.state.loading) {
@@ -150,6 +165,13 @@ export default class RepoScreen extends React.Component {
                     <View style={styles.views} >
                     
                         <View style={styles.flex_container}>
+                            <TouchableOpacity
+                                style={this.state.pressed ? styles.btn_fav : styles.btn_fav}
+                                onPress={() => { this.changeFavRepo()}}>
+                                <Image
+                                style={this.state.fav ? styles.icon_fav : styles.icon_unfav}
+                                source={{uri:"https://cdn.iconscout.com/icon/free/png-256/heart-56-76703.png"}} />
+                            </TouchableOpacity>
                             <Text style={styles.flex_text_info}>
                                 <Text style={styles.flex_name}>{ this.props.route.params.repoData.name} </Text>
                             </Text>
@@ -231,6 +253,26 @@ export default class RepoScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
+    
+    icon_fav: {
+        width: 60,
+        height: 60,
+        alignSelf: "flex-end",
+        tintColor:"red"
+    },
+    icon_unfav: {
+        width: 60,
+        height: 60,
+        alignSelf: "flex-end",
+        tintColor:"grey"
+    },
+    btn_fav: {
+        width: 60,
+        height: 60,
+        position: 'absolute',
+        top: 10,
+        right: 20,
+    },
     body: {
 
         fontFamily: "Open Sans",

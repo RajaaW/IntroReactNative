@@ -105,6 +105,20 @@ export default class SearchScreen extends React.Component {
 
     }
 
+    
+    componentDidMount() {
+        Store.getUsers().then((users) => {
+            this.setState({ users:JSON.parse(users) })
+        });
+
+        Store.getRepos().then((repos) => {
+            this.setState({ repos:JSON.parse(repos) })
+        });
+
+        this.setState({ loading: false })
+    }
+
+
     constructor(props) {
         super(props);
 

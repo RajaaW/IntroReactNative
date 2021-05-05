@@ -172,6 +172,13 @@ export default class ProfileScreen extends React.Component {
 
                         
                         <View style={styles.flex_container}>
+                            <TouchableOpacity
+                                style={this.state.pressed ? styles.btn_fav : styles.btn_fav}
+                                onPress={() => { this.changeFavProfil()}}>
+                                <Image
+                                style={this.state.fav ? styles.icon_fav : styles.icon_unfav}
+                                source={{uri:"https://cdn.iconscout.com/icon/free/png-256/heart-56-76703.png"}} />
+                            </TouchableOpacity>
                             <Image
                                 source={{ uri: this.props.route.params.userData.avatar_url }}
                                 style={styles.flex_img}
@@ -181,14 +188,7 @@ export default class ProfileScreen extends React.Component {
                                 <Text style={styles.flex_login}> {this.props.route.params.userData.login} </Text>
                             </Text>
                             <Text style={styles.flex_name}> {this.props.route.params.userData.name} </Text>
-                            <TouchableOpacity
-                                style={this.state.pressed ? styles.search_btn_pressed : styles.search_btn}
-                                onPress={() => { this.changeFavProfil()}}>
-                                <Image
-                                style={this.state.fav ? styles.icon_fav : styles.icon_unfav}
-                                source={this.state.fav ? require('../../../assets/like.png') : require('../../../assets/unlike.png')} />
-                            </TouchableOpacity>
-     
+                            
                             <View style={(this.props.route.params.userData.location) ? styles.flex_bottom_info : {display:"none"}}>
                                 <Image
                                     source={{ uri: "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png" }}
@@ -250,7 +250,28 @@ export default class ProfileScreen extends React.Component {
     }
 }
 
+
 const styles = StyleSheet.create({
+    
+    icon_fav: {
+        width: 60,
+        height: 60,
+        alignSelf: "flex-end",
+        tintColor:"red"
+    },
+    icon_unfav: {
+        width: 60,
+        height: 60,
+        alignSelf: "flex-end",
+        tintColor:"grey"
+    },
+    btn_fav: {
+        width: 60,
+        height: 60,
+        position: 'absolute',
+        top: 10,
+        right: 20,
+    },
     body: {
 
         fontFamily: "Open Sans",
