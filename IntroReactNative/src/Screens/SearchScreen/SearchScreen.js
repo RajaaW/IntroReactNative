@@ -446,6 +446,8 @@ const styles = StyleSheet.create({
         minWidth:"75%",
         margin: 12,
         borderWidth: 1,
+        borderRightColor: "#6e3b6e",
+        borderColor:"#6e3b6e",
         borderRadius: 12,
         padding: 10,
         position: 'absolute',
@@ -457,7 +459,7 @@ const styles = StyleSheet.create({
         height:20,
         alignSelf: "center",
         position: "relative",
-        tintColor: "black",
+        tintColor: "grey",
     },
     icon_pressed: {
         width: 20,
@@ -467,7 +469,7 @@ const styles = StyleSheet.create({
         tintColor: "#fff",
     },
     search_btn: {
-        backgroundColor: "#ffbde1",
+        backgroundColor: "#fff",
         borderColor:"#6e3b6e",
         flex: 1,
         flexDirection: 'row',

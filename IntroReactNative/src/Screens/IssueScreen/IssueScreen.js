@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { StyleSheet, FlatList, SafeAreaView, TouchableOpacity  ,ScrollView, Text, View, Image,Dimensions  } from 'react-native';
+import { Api } from '../request'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
 
 export default class IssueScreen extends React.Component {
-    toucheUsername = (user) => {
+    toucheUsername = async (user) => {
         // get issue info
         // move to another issue page and passing issue value in params
-        this.props.navigation.navigate('ProfileScreen', { userData:user})
+        const userData = await Api.searchInUser(item.login)
+        this.props.navigation.push('ProfileScreen', { userData})
        // alert("go to page of the issue") 
     }
     
@@ -36,10 +38,16 @@ export default class IssueScreen extends React.Component {
                     contentContainerStyle={this.state.content}>
                     <View style={styles.views} >
                         
-                        <Text>Title:  { this.props.route.params.issueData.title}</Text>
-                        <Text>state:  { this.props.route.params.issueData.state}</Text>
-                        <Text onPress={() => this.toucheUsername(this.props.route.params.issueData.user)}>user:  { this.props.route.params.issueData.user?.login}</Text>
-                        <Text>description:  { this.props.route.params.issueData.body}</Text>
+                        <View style={styles.flex_container}>
+                            <Text>TITLE:  { this.props.route.params.issueData.title}</Text>
+                            <Text>STATE:  { this.props.route.params.issueData.state}</Text>
+                        </View>
+                        <View style={styles.flex_container}>
+                            <Text onPress={() => this.toucheUsername(this.props.route.params.issueData.user)}>USER:  { this.props.route.params.issueData.user?.login}</Text>
+                        </View>
+                        <View style={styles.flex_container}>
+                            <Text>DESCRIPTION:  { this.props.route.params.issueData.body}</Text>
+                        </View>
                         
                     </View>
                 </ScrollView>
@@ -49,6 +57,31 @@ export default class IssueScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    flex_container: {
+        overflow: "hidden",
+        //backgroundColor: "#fff0fa",
+        backgroundColor: "#fff",
+        textAlign: "center",
+        borderRadius: 50,
+        position: "relative",
+        width: 390,
+        marginBottom: 10,
+        marginLeft: 1,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+
+        elevation: 8,
+        paddingTop: 20,
+        paddingLeft: 30,
+        paddingRight:30,
+        borderBottomWidth:0,
+
+    },
     views: {
         flex: 1,
         alignItems: 'center',
