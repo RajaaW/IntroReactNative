@@ -11,7 +11,7 @@ const ItemIssue = ({ item, onPress, backgroundColor, textColor, titleColor }) =>
             <Text style={[styles.textUsername, textColor]}>{item.user?.login}</Text>
         </Text>
         {(item.body) ? (
-            <Text style={[styles.text, textColor]}>{item.body}</Text>
+            <Text style={[styles.text, textColor]}>{item.body.substring(0,8)} ...</Text>
         ) : (null)}
 
 
