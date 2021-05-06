@@ -1,9 +1,6 @@
 import React from 'react';
 import {  View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {Store} from "../storage"
-import { StatusBar } from 'expo-status-bar';
-import  ProfileScreen  from '../ProfileScreen/ProfileScreen'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -51,11 +48,6 @@ export default class HomeScreen extends React.Component {
                     <Text style={styles.start_txt}>  SEARCH</Text>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity
-                    style={styles.start}
-                    onPress={() => this.props.navigation.navigate('FavScreen')}>
-                    <Text style={styles.start_txt}>  FAV</Text>
-                </TouchableOpacity> */}
             </View>
     );
     }

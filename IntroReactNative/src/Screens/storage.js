@@ -60,7 +60,7 @@ const addUser = async (user) => {
         'users',
         JSON.stringify(tab)
       );
-      console.log(tab)
+     // console.log(tab)
     } catch (error) {
       alert("Bad adding Users in favorites")
     }
@@ -76,7 +76,7 @@ const addRepo = async (repo) => {
       'repos',
       JSON.stringify(tab)
     );
-    console.log(tab)
+   // console.log(tab)
   } catch (error) {
     alert("Bad adding repositories favorites")
   }

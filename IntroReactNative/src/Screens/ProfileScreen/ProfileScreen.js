@@ -134,12 +134,27 @@ export default class ProfileScreen extends React.Component {
         }
     }
 
+    loadingList = () => {
+            return (
+                <Image
+                    style={{ width: 100, height:100, alignSelf:"center"}}
+                        source={{ uri: "https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" }} />
+                        //source={{ uri: "https://cdn.dribbble.com/users/1133112/screenshots/3164394/__.gif" }} />
+                    
+            )
+    }
+
     
     //Login, avatar and type 
     render() {
         if(this.state.loading) {
             return (
-                <Text>Loading...</Text>
+                <Image
+                    style={{ width: 300, height:200}}
+                        //source={{ uri: "https://miro.medium.com/max/1600/1*CsJ05WEGfunYMLGfsT2sXA.gif" }} />
+                        source={{ uri: "https://cdn.dribbble.com/users/1133112/screenshots/3164394/__.gif" }} />
+                    
+            
             )
         }
         // {console.log(this.props.route.params.userData)}
@@ -157,6 +172,13 @@ export default class ProfileScreen extends React.Component {
 
                         
                         <View style={styles.flex_container}>
+                            <TouchableOpacity
+                                style={this.state.pressed ? styles.btn_fav : styles.btn_fav}
+                                onPress={() => { this.changeFavProfil()}}>
+                                <Image
+                                style={this.state.fav ? styles.icon_fav : styles.icon_unfav}
+                                source={{uri:"https://cdn.iconscout.com/icon/free/png-256/heart-56-76703.png"}} />
+                            </TouchableOpacity>
                             <Image
                                 source={{ uri: this.props.route.params.userData.avatar_url }}
                                 style={styles.flex_img}
@@ -166,14 +188,7 @@ export default class ProfileScreen extends React.Component {
                                 <Text style={styles.flex_login}> {this.props.route.params.userData.login} </Text>
                             </Text>
                             <Text style={styles.flex_name}> {this.props.route.params.userData.name} </Text>
-                            <TouchableOpacity
-                                style={this.state.pressed ? styles.search_btn_pressed : styles.search_btn}
-                                onPress={() => { this.changeFavProfil()}}>
-                                <Image
-                                style={this.state.fav ? styles.icon_fav : styles.icon_unfav}
-                                source={this.state.fav ? require('../../../assets/like.png') : require('../../../assets/unlike.png')} />
-                            </TouchableOpacity>
-     
+                            
                             <View style={(this.props.route.params.userData.location) ? styles.flex_bottom_info : {display:"none"}}>
                                 <Image
                                     source={{ uri: "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png" }}
@@ -187,38 +202,46 @@ export default class ProfileScreen extends React.Component {
 
 
                         <View style={styles.flex_container_list}>
-                        <Text style={styles.flex_text_list_title} > Repositories </Text>
-                        <View   onStartShouldSetResponderCapture={() => {
+                            <Text style={styles.flex_text_list_title} > Repositories </Text>
+                            {(this.state.repos) ? (
+                                <View   onStartShouldSetResponderCapture={() => {
                                     this.setState({ enableScrollViewScroll: false });
                                     if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
                                         this.setState({ enableScrollViewScroll: true });
                                     }}}
-                            style={styles.container}>
-                            <FlatList
-                                data={this.state.repos}
-                                renderItem={this.state.renderRepo}
-                                keyExtractor={(item) => item.id}
-                                extraData={this.state.selectedIdRepo}
-                            />
+                                    style={styles.container}>
+                                    <FlatList
+                                        data={this.state.repos}
+                                        renderItem={this.state.renderRepo}
+                                        keyExtractor={(item) => item.id}
+                                        extraData={this.state.selectedIdRepo}
+                                    />
+                                </View>
+                            ) : (
+                                this.loadingList()
+                            )}
                         </View>
-</View>
 
                         <View style={styles.flex_container_list}>
                             <Text style={styles.flex_text_list_title} >Followers </Text>
-                            <View onStartShouldSetResponderCapture={() => {
-                                        this.setState({ enableScrollViewScroll: false });
-                                        if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
-                                            this.setState({ enableScrollViewScroll: true });
-                                        }}}
-                                style={styles.container}>
-                                <FlatList
-                                scrollEnabled={true}
-                                    data={this.state.followers}
-                                    renderItem={this.state.renderFollower}
-                                    keyExtractor={(item) => item.id}
-                                    extraData={this.state.selectedIdFollower}
-                                />
-                            </View>
+                            {(this.state.followers) ? (
+                                <View onStartShouldSetResponderCapture={() => {
+                                            this.setState({ enableScrollViewScroll: false });
+                                            if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
+                                                this.setState({ enableScrollViewScroll: true });
+                                            }}}
+                                    style={styles.container}>
+                                    <FlatList
+                                    scrollEnabled={true}
+                                        data={this.state.followers}
+                                        renderItem={this.state.renderFollower}
+                                        keyExtractor={(item) => item.id}
+                                        extraData={this.state.selectedIdFollower}
+                                    />
+                                </View>
+                            ) : (
+                                this.loadingList()
+                            )}
                         </View>
                     </View>
                 </ScrollView>
@@ -227,7 +250,28 @@ export default class ProfileScreen extends React.Component {
     }
 }
 
+
 const styles = StyleSheet.create({
+    
+    icon_fav: {
+        width: 60,
+        height: 60,
+        alignSelf: "flex-end",
+        tintColor:"red"
+    },
+    icon_unfav: {
+        width: 60,
+        height: 60,
+        alignSelf: "flex-end",
+        tintColor:"grey"
+    },
+    btn_fav: {
+        width: 60,
+        height: 60,
+        position: 'absolute',
+        top: 10,
+        right: 20,
+    },
     body: {
 
         fontFamily: "Open Sans",
@@ -338,7 +382,8 @@ const styles = StyleSheet.create({
     flex_text_info: {
 
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        alignSelf: "center",
     },
 
     flex_bottom_info: {
