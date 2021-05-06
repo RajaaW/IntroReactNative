@@ -1,7 +1,7 @@
 //import * as React from 'react';
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Button, View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList ,Dimensions  } from 'react-native';
+import { Button, View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList ,Dimensions, Alert  } from 'react-native';
 
 
 import {Api} from '../request'
