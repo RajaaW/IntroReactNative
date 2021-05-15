@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, FlatList, SafeAreaView, TouchableOpacity  ,ScrollView, Text, View, Image,Dimensions  } from 'react-native';
 import { Api } from '../request'
+import { Store } from '../storage'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const ItemIssue = ({ item, onPress, backgroundColor, textColor, titleColor }) => (
@@ -57,9 +58,27 @@ export default class RepoScreen extends React.Component {
         this.searchByUrl(this.props.route.params.repoData?.contributors_url).then((contributors) => {
             this.setState({ contributors })
         })
-
+        this.getRepoUsers().then(result => {
+            const result2 = JSON.parse(result)
+            let find = result2.find(elem => elem.full_name === this.props.route.params.repoData.full_name)
+            if (find === undefined)
+                this.setState({fav: false})
+            else
+                this.setState({fav: true})
+        })
+        
         this.setState({ loading: false })
     }
+
+    getRepoUsers = async () => {
+        try {
+            const rep = await Store.getRepos();
+            return rep
+        } catch (err) {
+            console.log(err)
+        }
+    }
+        
 
 
 
@@ -73,7 +92,7 @@ export default class RepoScreen extends React.Component {
         this.setState({ selectedIdContributor: item.id })
         
         const userData = await Api.searchInUser(item.login)
-        console.log(userData)
+        // console.log(userData)
         this.props.navigation.push('ProfileScreen', { userData })
     }
     constructor(props) {
@@ -134,7 +153,7 @@ export default class RepoScreen extends React.Component {
 
     changeFavRepo = async () => {
         if (this.state.fav) {
-            Store.delRepo(this.props.route.params.repoData.name)
+            Store.delRepo(this.props.route.params.repoData.full_name)
             this.setState({fav: false})
         }
         else {

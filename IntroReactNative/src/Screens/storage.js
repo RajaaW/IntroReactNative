@@ -67,9 +67,11 @@ const addUser = async (user) => {
 };
 
 const addRepo = async (repo) => {
-  var tab = await getUsers()
+  var tab = await getRepos()
   tab = JSON.parse(tab)
+  // console.log("avant", tab)
   tab.push(repo)
+  // console.log("apres", tab)
 
   try {
     await AsyncStorage.setItem(
@@ -83,9 +85,10 @@ const addRepo = async (repo) => {
 };
 
 const delRepo = async (repo) => {
-    const tab = getRepos()
+    var tab = await getRepos()
     tab = JSON.parse(tab)
     var ntab = tab.filter(item => item.full_name !== repo)
+    // console.log(ntab)
 
     try {
       await AsyncStorage.setItem(

@@ -61,7 +61,25 @@ export default class ProfileScreen extends React.Component {
             this.setState({ followers })
         })
 
+        this.getFavUsers().then(result => {
+            const result2 = JSON.parse(result)
+            let find = result2.find(elem => elem.login === this.props.route.params.userData.login)
+            if (find === undefined)
+                this.setState({fav: false})
+            else
+                this.setState({fav: true})
+        })
+        
         this.setState({ loading: false })
+    }
+
+    getFavUsers = async () => {
+        try {
+            const rep = await Store.getUsers();
+            return rep
+        } catch (err) {
+            console.log(err)
+        }
     }
         
     
@@ -105,7 +123,7 @@ export default class ProfileScreen extends React.Component {
             repos: null,
             followers: null,
             fav: false,
-            
+            favUsers: [],
             // No need to touch renderRepo & renderFollower
             renderRepo : ({ item }) => {
                 const backgroundColor = item.id === this.state.selectedIdRepo ? "#6e3b6e" : "#ffffff";
@@ -133,6 +151,9 @@ export default class ProfileScreen extends React.Component {
             }
         }
     }
+
+
+
 
     loadingList = () => {
             return (
