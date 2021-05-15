@@ -60,6 +60,37 @@ const searchUsers = async (name) => {
         [{text: "Try again", onPress: () => console.log("cancelled")}]
     ));
 }
+
+const searchMoreUsers = async (name, pages) => {
+    return fetch(`https://api.github.com/search/users?q=${name}+in:login&page=${pages}`)
+    .then((response) => {if(response.ok) {
+        return response.json();
+    } else {
+        throw new Error('No users available to show, please verify the spelling');
+    }})
+        .then(data => {return (data?.items)})
+    .catch( error => Alert.alert(
+        "Error",
+        error.message,
+        [{text: "Try again", onPress: () => console.log("cancelled")}]
+    ));
+}
+
+const searchMoreRepos = async (name, pages) => {
+    return fetch(`https://api.github.com/search/repositories?q=${name}+in:name&pages=${pages}`)
+    .then((response) => {if(response.ok) {
+        return response.json();
+    } else {
+        throw new Error('No repositories available to show, please verify the spelling');
+    }})
+        .then(data => {return (data?.items)})
+    .catch( error => Alert.alert(
+        "Error",
+        error.message,
+        [{text: "Try again", onPress: () => console.log("cancelled")}]
+    ));
+}
+
 const searchInUser = async (name) => {
     return fetch(`https://api.github.com/search/users?q=${name}+in:login`)
     .then((response) => {if(response.ok) {
@@ -169,8 +200,10 @@ const searchByUrl = async (requete) => {
 export const Api = {
     searchUser,
     searchUsers,
+    searchMoreUsers,
     searchRepo,
     searchRepos,
+    searchMoreRepos,
     searchInUser,
     searchUserRepos,
     searchRepoIssues,

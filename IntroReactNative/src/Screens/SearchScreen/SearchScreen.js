@@ -119,6 +119,7 @@ export default class SearchScreen extends React.Component {
             selectedIdUsers: null,
             users: null,
             repos:null,
+            // pages: 1,
 
             
             renderRepo : ({ item }) => {
@@ -180,6 +181,29 @@ export default class SearchScreen extends React.Component {
             oldText: this.state.text,
             users:users,
             repos:repos
+        })
+
+        } catch (err) {
+            console.log("err", err)
+        }
+
+    }
+
+    getMoreSearch = async () => {
+        try {
+            const user = await Api.searchMoreUsers(this.state.text); //this.state.pages
+            const repo = await Api.searchMoreRepos(this.state.text); //this.state.pages
+
+            // const rep = await Api.searchByUrl(url);
+            // return rep
+
+        this.setState({
+            pressed: true,
+            loading: false,
+            oldText: this.state.text,
+            users:this.state.users + user,
+            repos:this.state.repos + repo
+            //pages: this.state.pages
         })
 
         } catch (err) {

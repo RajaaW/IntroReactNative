@@ -39,14 +39,19 @@ export default class IssueScreen extends React.Component {
                     <View style={styles.views} >
                         
                         <View style={styles.flex_container}>
-                            <Text>TITLE:  { this.props.route.params.issueData.title}</Text>
-                            <Text>STATE:  { this.props.route.params.issueData.state}</Text>
+                            <Text style={styles.flex_type}>USER  </Text>
+                            <Text onPress={() => this.toucheUsername(this.props.route.params.issueData.user)} style={styles.flex_login}> { this.props.route.params.issueData.user?.login}</Text>
                         </View>
+
                         <View style={styles.flex_container}>
-                            <Text onPress={() => this.toucheUsername(this.props.route.params.issueData.user)}>USER:  { this.props.route.params.issueData.user?.login}</Text>
+                            <Text style={styles.flex_type}>{ this.props.route.params.issueData.title}</Text>
+                            <Text style={styles.flex_type_state}>STATE : </Text>
+                            <Text style={styles.flex_type_desc}>{ this.props.route.params.issueData.state}</Text>
                         </View>
+                        
                         <View style={styles.flex_container}>
-                            <Text>DESCRIPTION:  { this.props.route.params.issueData.body}</Text>
+                            <Text style={styles.flex_type}>DESCRIPTION  </Text>
+                            <Text style={styles.flex_type_desc}>{ this.props.route.params.issueData.body}</Text>
                         </View>
                         
                     </View>
@@ -57,6 +62,41 @@ export default class IssueScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    flex_login: {
+        fontSize: 16,
+        textAlign: "center",
+        marginBottom: "5%",
+        marginTop: "2%"
+    },
+    flex_type: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 17,
+        fontVariant: ["small-caps"],
+        color:"#6e3b6e",
+        fontWeight: "bold",
+    },
+    flex_type_state: {
+        textAlign: "center",
+        marginTop: "8%",
+        fontWeight: "bold",
+        fontSize: 14,
+        color:"#6e3b6e",
+    },
+    flex_type_desc: {
+        textAlign: "center",
+        marginTop: "2%",
+        marginBottom: "5%",
+        fontSize: 15,
+        fontVariant: ["small-caps"],
+    },
+    flex_text_info: {
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        marginBottom: "5%",
+        marginTop: "8%"
+    },
     flex_container: {
         overflow: "hidden",
         //backgroundColor: "#fff0fa",
