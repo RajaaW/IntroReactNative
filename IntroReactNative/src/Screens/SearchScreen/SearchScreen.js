@@ -49,6 +49,12 @@ const ItemUsers = ({ item, onPress, backgroundColor, textColor }) => (
     </TouchableOpacity>
 )
 
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+};
+
 const SearchResult = ({ state , selectTab }) => (
     
                     <View style={styles.container_result}>
@@ -66,7 +72,14 @@ const SearchResult = ({ state , selectTab }) => (
                         </View>
 
 
-                        <ScrollView style={state.repoSelected ? '' : {display:"none"} }>
+                        <ScrollView 
+                            style={state.repoSelected ? '' : {display:"none"} } 
+                            onScroll={({nativeEvent}) => {
+                                if (isCloseToBottom(nativeEvent)) {
+                                    console.log("A LA FIN DE LA SCROLLVIEW")
+                                }
+                            }}
+                        >
                             <FlatList
                                 data={state.repos}
                                 renderItem={state.renderRepo}
@@ -75,7 +88,14 @@ const SearchResult = ({ state , selectTab }) => (
                             />
                         
                         </ScrollView>
-                        <ScrollView style={state.repoSelected ? {display:"none"} : "" }>
+                        <ScrollView 
+                            style={state.repoSelected ? {display:"none"} : "" }
+                            onScroll={({nativeEvent}) => {
+                                if (isCloseToBottom(nativeEvent)) {
+                                    console.log("A LA FIN DE LA SCROLLVIEW")
+                                }
+                            }}
+                        >
                             <FlatList
                                 data={state.users}
                                 renderItem={state.renderUsers}
