@@ -10,7 +10,7 @@ export default class IssueScreen extends React.Component {
     toucheUsername = async (user) => {
         // get issue info
         // move to another issue page and passing issue value in params
-        const userData = await Api.searchInUser(item.login)
+        const userData = await Api.searchInUser(user.login)
         this.props.navigation.push('ProfileScreen', { userData})
        // alert("go to page of the issue") 
     }

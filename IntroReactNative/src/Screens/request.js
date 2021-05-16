@@ -17,7 +17,10 @@ const searchUser = async (name) => {
 
 const searchRepos = async (name) => {
     return fetch('https://api.github.com/search/repositories?q='+name+'+in:name')
-    .then((response) => {if(response.ok) {
+    .then((response) => {
+        console.log("DANS SEARCH REPO")
+        console.log(response)
+        if(response.ok) {
         return response.json();
     } else {
         throw new Error('No repositories available to show, please verify the spelling');
@@ -33,7 +36,8 @@ const searchRepos = async (name) => {
 
 const searchRepo = async (name) => {
     return fetch('https://api.github.com/search/repositories?q='+name+'+in:name')
-    .then((response) => {if(response.ok) {
+    .then((response) => {
+        if(response.ok) {
         return response.json();
     } else {
         throw new Error('No repository available to show, please verify the spelling');
@@ -62,34 +66,6 @@ const searchUsers = async (name) => {
 }
 
 const searchMoreUsers = async (name, pages) => {
-    // fetch('https://api.github.com/search/repositories?q=${name}+in:name/rate_limit')
-    // .then((resp) => {
-    //     console.log("SEARCH MORE REPOS RESP :")
-    //     if (resp.redirected != false) {
-    //         fetch(`https://api.github.com/search/users?q=${name}+in:login&page=${pages}`)
-    //         .then((response) => {
-    //             console.log("RESPONSE DANS SEARCH MORE REPOS")
-    //             console.log(response)
-    //             if(response.ok) {
-    //                 console.log(response.ok)
-    //                 return response.json();
-    //             } else {
-    //                 throw new Error('No users available to show, please verify the spelling');
-    //             }
-    //         })
-    //         .then(data => {return (data?.items)})
-    //         .catch( error => Alert.alert(
-    //             "Error",
-    //             error.message,
-    //             [{text: "Try again", onPress: () => console.log("cancelled")}]
-    //         ));
-    //     } else {
-    //         console.log("ERROR IN SEARCH MORE REPOS")
-    //     }
-    // })
-
-
-    // console.log("DANS SEARCH MORE USERS AVANT FETCH")
     return fetch(`https://api.github.com/search/users?q=${name}+in:login&page=${pages}`)
     .then((response) => {
         console.log("RESPONSE IS :")
@@ -110,34 +86,9 @@ const searchMoreUsers = async (name, pages) => {
 }
 
 const searchMoreRepos = async (name, pages) => {
-    // fetch('https://api.github.com/search/repositories?q=${name}+in:name/rate_limit')
-    // .then((resp) => {
-    //     console.log("SEARCH MORE REPOS RESP :")
-    //     if (resp.redirected != false) {
-    //         fetch(`https://api.github.com/search/repositories?q=${name}+in:name&page=${pages}`)
-    //         .then((response) => {
-    //             console.log("RESPONSE DANS SEARCH MORE REPOS")
-    //             console.log(response)
-    //             if(response.ok) {
-    //                 console.log(response.ok)
-    //                 return response.json();
-    //             } else {
-    //                 throw new Error('No repositories available to show, please verify the spelling');
-    //             }
-    //         })
-    //         .then(data => {return (data?.items)})
-    //         .catch( error => Alert.alert(
-    //             "Error",
-    //             error.message,
-    //             [{text: "Try again", onPress: () => console.log("cancelled")}]
-    //         ));
-    //     } else {
-    //         console.log("ERROR IN SEARCH MORE REPOS")
-    //     }
-    // })
     return fetch(`https://api.github.com/search/repositories?q=${name}+in:name&page=${pages}`)
     .then((response) => {
-        console.log("RESPONSE IS :")
+        console.log("DANS SEARCH MORE REPO")
         console.log(response)
         if(response.status == 200) {
         return response.json();
