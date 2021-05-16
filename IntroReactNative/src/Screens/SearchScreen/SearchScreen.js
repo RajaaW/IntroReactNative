@@ -15,9 +15,9 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         <View style={styles.flex_container_item}>
             <View style={{flexDirection: 'column'}}>
                 <Text style={[styles.title, textColor]}>{item.name}</Text>
-                <Text style={{
+                {/* <Text style={{
         fontSize: 10,
-        fontVariant: ["small-caps"]}}> by {item.owner.login}</Text>
+        fontVariant: ["small-caps"]}}> {console.log(item.owner.login)}by {item.owner.login}</Text> */}
             </View>
         </View>
         
@@ -49,7 +49,13 @@ const ItemUsers = ({ item, onPress, backgroundColor, textColor }) => (
     </TouchableOpacity>
 )
 
-const SearchResult = ({ state , selectTab }) => (
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom;
+};
+
+const SearchResult = ({ state , selectTab, getMoreSearchRepos, getMoreSearchUsers}) => (
     
                     <View style={styles.container_result}>
                         <View style={styles.tabs_btn_container}>
@@ -66,7 +72,14 @@ const SearchResult = ({ state , selectTab }) => (
                         </View>
 
 
-                        <ScrollView style={state.repoSelected ? '' : {display:"none"} }>
+                        <ScrollView 
+                            style={state.repoSelected ? '' : {display:"none"} } 
+                            onScroll={({nativeEvent}) => {
+                                if (isCloseToBottom(nativeEvent)) {
+                                    getMoreSearchRepos()
+                                }
+                            }}
+                        >
                             <FlatList
                                 data={state.repos}
                                 renderItem={state.renderRepo}
@@ -75,7 +88,14 @@ const SearchResult = ({ state , selectTab }) => (
                             />
                         
                         </ScrollView>
-                        <ScrollView style={state.repoSelected ? {display:"none"} : "" }>
+                        <ScrollView 
+                            style={state.repoSelected ? {display:"none"} : "" }
+                            onScroll={({nativeEvent}) => {
+                                if (isCloseToBottom(nativeEvent)) {
+                                    getMoreSearchUsers()
+                                }
+                            }}
+                        >
                             <FlatList
                                 data={state.users}
                                 renderItem={state.renderUsers}
@@ -119,6 +139,8 @@ export default class SearchScreen extends React.Component {
             selectedIdUsers: null,
             users: null,
             repos:null,
+            count: 2,
+            countUser: 2,
 
             
             renderRepo : ({ item }) => {
@@ -173,17 +195,61 @@ export default class SearchScreen extends React.Component {
 
             // const rep = await Api.searchByUrl(url);
             // return rep
-
-        this.setState({
-            pressed: true,
-            loading: false,
-            oldText: this.state.text,
-            users:users,
-            repos:repos
-        })
-
+            this.setState({
+                pressed: true,
+                loading: false,
+                oldText: this.state.text,
+                users:users,
+                repos:repos,
+                count: 2,
+                countUser: 2
+            })
         } catch (err) {
             console.log("err", err)
+        }
+
+    }
+
+    getMoreSearchRepos = async () => {
+        try {
+            const repo = await Api.searchMoreRepos(this.state.text, this.state.count);
+            if (repo != undefined) {
+                const newRepos = this.state.repos.concat(repo)
+                this.setState({
+                    repos: newRepos,
+                    count: this.state.count + 1
+                })         
+            } else {
+                throw new Error('No repositories available to show, API rate limit exceeded');
+            }
+        } catch (err) {
+            Alert.alert(
+                "Error",
+                err.message,
+                [{text: "Try again", onPress: () => console.log("cancelled")}]
+            )
+        }
+
+    }
+
+    getMoreSearchUsers = async () => {
+        try {
+            const user = await Api.searchMoreUsers(this.state.text, this.state.countUser);
+            if (user != undefined) {
+                const newUsers = this.state.users.concat(user)
+                this.setState({
+                    users: newUsers,
+                    countUser: this.state.countUser + 1
+                })
+            } else {
+                throw new Error('No users available to show, API rate limit exceeded');
+            }
+        } catch (err) {
+            Alert.alert(
+                "Error",
+                err.message,
+                [{text: "Try again", onPress: () => console.log("cancelled")}]
+            )
         }
 
     }
@@ -202,7 +268,6 @@ export default class SearchScreen extends React.Component {
     }
     
     render() {
-        
         return (
             <View style={styles.container}>
             
@@ -239,6 +304,8 @@ export default class SearchScreen extends React.Component {
                     <SearchResult
                         state={this.state}
                         selectTab = {this.selectTab}
+                        getMoreSearchRepos = {this.getMoreSearchRepos}
+                        getMoreSearchUsers = {this.getMoreSearchUsers}
                     />
 
                 ) : (

@@ -17,7 +17,10 @@ const searchUser = async (name) => {
 
 const searchRepos = async (name) => {
     return fetch('https://api.github.com/search/repositories?q='+name+'+in:name')
-    .then((response) => {if(response.ok) {
+    .then((response) => {
+        console.log("DANS SEARCH REPO")
+        console.log(response)
+        if(response.ok) {
         return response.json();
     } else {
         throw new Error('No repositories available to show, please verify the spelling');
@@ -33,7 +36,8 @@ const searchRepos = async (name) => {
 
 const searchRepo = async (name) => {
     return fetch('https://api.github.com/search/repositories?q='+name+'+in:name')
-    .then((response) => {if(response.ok) {
+    .then((response) => {
+        if(response.ok) {
         return response.json();
     } else {
         throw new Error('No repository available to show, please verify the spelling');
@@ -60,6 +64,39 @@ const searchUsers = async (name) => {
         [{text: "Try again", onPress: () => console.log("cancelled")}]
     ));
 }
+
+const searchMoreUsers = async (name, pages) => {
+    return fetch(`https://api.github.com/search/users?q=${name}+in:login&page=${pages}`)
+    .then((response) => {
+        if(response.ok) {  
+            return response.json();
+        } else {
+            throw new Error('No users available to show, please verify the spelling');
+        }})
+    .then(data => {return (data?.items)})
+    .catch( error => Alert.alert(
+        "Error",
+        error.message,
+        [{text: "Try again", onPress: () => console.log("cancelled")}]
+    ));
+}
+
+const searchMoreRepos = async (name, pages) => {
+    return fetch(`https://api.github.com/search/repositories?q=${name}+in:name&page=${pages}`)
+    .then((response) => {
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('No repositories available to show, please verify the spelling');
+        }})
+    .then(data => {return (data?.items)})
+    .catch( error => Alert.alert(
+        "Error",
+        error.message,
+        [{text: "Try again", onPress: () => console.log("cancelled")}]
+    ));
+}
+
 const searchInUser = async (name) => {
     return fetch(`https://api.github.com/search/users?q=${name}+in:login`)
     .then((response) => {if(response.ok) {
@@ -169,8 +206,10 @@ const searchByUrl = async (requete) => {
 export const Api = {
     searchUser,
     searchUsers,
+    searchMoreUsers,
     searchRepo,
     searchRepos,
+    searchMoreRepos,
     searchInUser,
     searchUserRepos,
     searchRepoIssues,
