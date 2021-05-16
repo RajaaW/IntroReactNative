@@ -15,9 +15,9 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         <View style={styles.flex_container_item}>
             <View style={{flexDirection: 'column'}}>
                 <Text style={[styles.title, textColor]}>{item.name}</Text>
-                <Text style={{
+                {/* <Text style={{
         fontSize: 10,
-        fontVariant: ["small-caps"]}}> by {item.owner.login}</Text>
+        fontVariant: ["small-caps"]}}> {console.log(item.owner.login)}by {item.owner.login}</Text> */}
             </View>
         </View>
         
@@ -55,7 +55,7 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
       contentSize.height - paddingToBottom;
 };
 
-const SearchResult = ({ state , selectTab }) => (
+const SearchResult = ({ state , selectTab, getMoreSearchRepos, getMoreSearchUsers, countUser}) => (
     
                     <View style={styles.container_result}>
                         <View style={styles.tabs_btn_container}>
@@ -76,7 +76,10 @@ const SearchResult = ({ state , selectTab }) => (
                             style={state.repoSelected ? '' : {display:"none"} } 
                             onScroll={({nativeEvent}) => {
                                 if (isCloseToBottom(nativeEvent)) {
-                                    console.log("A LA FIN DE LA SCROLLVIEW")
+                                    getMoreSearchRepos()
+                                    // console.log("COUNT ++ = ")
+                                    // console.log(count)
+                                    // console.log("A LA FIN DE LA SCROLLVIEW")
                                 }
                             }}
                         >
@@ -92,6 +95,7 @@ const SearchResult = ({ state , selectTab }) => (
                             style={state.repoSelected ? {display:"none"} : "" }
                             onScroll={({nativeEvent}) => {
                                 if (isCloseToBottom(nativeEvent)) {
+                                    // getMoreSearchUsers(countUser + 1)
                                     console.log("A LA FIN DE LA SCROLLVIEW")
                                 }
                             }}
@@ -139,7 +143,7 @@ export default class SearchScreen extends React.Component {
             selectedIdUsers: null,
             users: null,
             repos:null,
-            // pages: 1,
+            count: 2,
 
             
             renderRepo : ({ item }) => {
@@ -209,22 +213,63 @@ export default class SearchScreen extends React.Component {
 
     }
 
-    getMoreSearch = async () => {
+    getMoreSearchRepos = async () => {
         try {
-            const user = await Api.searchMoreUsers(this.state.text); //this.state.pages
-            const repo = await Api.searchMoreRepos(this.state.text); //this.state.pages
-
+            // console.log("GET MORE SEARCH COUNT")
+            // console.log(count)
+            // const user = await Api.searchMoreUsers(this.state.text, count); //this.state.pages
+            const repo = await Api.searchMoreRepos(this.state.text, this.state.count); //this.state.pages
+            // console.log("REPO IS ")
+            // console.log(repo)
+            // console.log("USER : ")
+            // console.log(user)
             // const rep = await Api.searchByUrl(url);
             // return rep
-
+            // const newUsers = this.state.users.concat(user)
+            console.log("state count")
+            console.log(this.state.count)
+            const newRepos = this.state.repos.concat(repo)
+            // console.log("NEW REPOS ")
+            // console.log(newRepos)
+            // console.log("NEWUSERS : ==============>")
+            // console.log(newUsers)
+            // console.log("PAGES : ")
+            // console.log(this.state.pages)
         this.setState({
-            pressed: true,
-            loading: false,
-            oldText: this.state.text,
-            users:this.state.users + user,
-            repos:this.state.repos + repo
-            //pages: this.state.pages
+            // users: newUsers,
+            repos: newRepos,
+            count: this.state.count + 1
+            // pages: this.state.pages
         })
+        console.log(this.state.repos)
+        
+
+        } catch (err) {
+            console.log("err", err)
+        }
+
+    }
+
+    getMoreSearchUsers = async (count) => {
+        try {
+            const user = await Api.searchMoreUsers(this.state.text, count); //this.state.pages
+            // const repo = await Api.searchMoreRepos(this.state.text, count); //this.state.pages
+            // console.log("USER : ")
+            // console.log(user)
+            // const rep = await Api.searchByUrl(url);
+            // return rep
+            const newUsers = this.state.users.concat(user)
+            // const newRepos = this.state.repos.concat(repo)
+            // console.log("NEWUSERS : ==============>")
+            // console.log(newUsers)
+            // console.log("PAGES : ")
+            // console.log(this.state.pages)
+        this.setState({
+            users: newUsers,
+            // repos: newRepos,
+            // pages: this.state.pages
+        })
+        
 
         } catch (err) {
             console.log("err", err)
@@ -246,7 +291,8 @@ export default class SearchScreen extends React.Component {
     }
     
     render() {
-        
+        // var count = 2
+        var countUser = 2
         return (
             <View style={styles.container}>
             
@@ -283,6 +329,10 @@ export default class SearchScreen extends React.Component {
                     <SearchResult
                         state={this.state}
                         selectTab = {this.selectTab}
+                        getMoreSearchRepos = {this.getMoreSearchRepos}
+                        // getMoreSearchUsers = {this.getMoreSearchUsers(countUser)}
+                        // count={count}
+                        // countUser={countUser}
                     />
 
                 ) : (
