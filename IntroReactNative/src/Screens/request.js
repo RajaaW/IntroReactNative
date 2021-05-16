@@ -68,16 +68,12 @@ const searchUsers = async (name) => {
 const searchMoreUsers = async (name, pages) => {
     return fetch(`https://api.github.com/search/users?q=${name}+in:login&page=${pages}`)
     .then((response) => {
-        console.log("RESPONSE IS :")
-        console.log(response.status)
-        if(response.ok) {
-        console.log("DANS SEARCH USERS")
-        console.log(response)
-        return response.json();
-    } else {
-        throw new Error('No users available to show, please verify the spelling');
-    }})
-        .then(data => {return (data?.items)})
+        if(response.ok) {  
+            return response.json();
+        } else {
+            throw new Error('No users available to show, please verify the spelling');
+        }})
+    .then(data => {return (data?.items)})
     .catch( error => Alert.alert(
         "Error",
         error.message,
@@ -88,15 +84,12 @@ const searchMoreUsers = async (name, pages) => {
 const searchMoreRepos = async (name, pages) => {
     return fetch(`https://api.github.com/search/repositories?q=${name}+in:name&page=${pages}`)
     .then((response) => {
-        console.log("DANS SEARCH MORE REPO")
-        console.log(response)
-        if(response.status == 200) {
-        return response.json();
-    } else {
-        console.log("ERROR")
-        throw new Error('No repositories available to show, please verify the spelling');
-    }})
-        .then(data => {return (data?.items)})
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('No repositories available to show, please verify the spelling');
+        }})
+    .then(data => {return (data?.items)})
     .catch( error => Alert.alert(
         "Error",
         error.message,

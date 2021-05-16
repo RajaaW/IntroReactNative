@@ -195,17 +195,15 @@ export default class SearchScreen extends React.Component {
 
             // const rep = await Api.searchByUrl(url);
             // return rep
-
-        this.setState({
-            pressed: true,
-            loading: false,
-            oldText: this.state.text,
-            users:users,
-            repos:repos,
-            count: 2,
-            countUser: 2
-        })
-
+            this.setState({
+                pressed: true,
+                loading: false,
+                oldText: this.state.text,
+                users:users,
+                repos:repos,
+                count: 2,
+                countUser: 2
+            })
         } catch (err) {
             console.log("err", err)
         }
@@ -215,27 +213,43 @@ export default class SearchScreen extends React.Component {
     getMoreSearchRepos = async () => {
         try {
             const repo = await Api.searchMoreRepos(this.state.text, this.state.count);
-            const newRepos = this.state.repos.concat(repo)
-            this.setState({
-                repos: newRepos,
-                count: this.state.count + 1
-            })     
+            if (repo != undefined) {
+                const newRepos = this.state.repos.concat(repo)
+                this.setState({
+                    repos: newRepos,
+                    count: this.state.count + 1
+                })         
+            } else {
+                throw new Error('No repositories available to show, API rate limit exceeded');
+            }
         } catch (err) {
-            console.log("err", err)
+            Alert.alert(
+                "Error",
+                err.message,
+                [{text: "Try again", onPress: () => console.log("cancelled")}]
+            )
         }
 
     }
 
     getMoreSearchUsers = async () => {
         try {
-            const user = await Api.searchMoreUsers(this.state.text, this.state.countUser); //this.state.pages
-            const newUsers = this.state.users.concat(user)
-            this.setState({
-                users: newUsers,
-                countUser: this.state.countUser + 1
-            })
+            const user = await Api.searchMoreUsers(this.state.text, this.state.countUser);
+            if (user != undefined) {
+                const newUsers = this.state.users.concat(user)
+                this.setState({
+                    users: newUsers,
+                    countUser: this.state.countUser + 1
+                })
+            } else {
+                throw new Error('No users available to show, API rate limit exceeded');
+            }
         } catch (err) {
-            console.log("err", err)
+            Alert.alert(
+                "Error",
+                err.message,
+                [{text: "Try again", onPress: () => console.log("cancelled")}]
+            )
         }
 
     }
