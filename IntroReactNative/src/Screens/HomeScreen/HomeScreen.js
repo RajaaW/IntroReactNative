@@ -1,12 +1,16 @@
 import React from 'react';
 import {  View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {Store} from "../storage"
-
+import { LogBox } from 'react-native';
+//LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 
 export default class HomeScreen extends React.Component {
 
-    constructor(props) {super(props)}
+    constructor(props) {
+        super(props)
+    }
 
     componentDidMount() {
         Store.initRepos()

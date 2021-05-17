@@ -15,9 +15,9 @@ const ItemRepo = ({ item, onPress, backgroundColor, textColor }) => (
         <View style={styles.flex_container_item}>
             <View style={{flexDirection: 'column'}}>
                 <Text style={[styles.title, textColor]}>{item.name}</Text>
-                {/* <Text style={{
+                <Text style={{
         fontSize: 10,
-        fontVariant: ["small-caps"]}}> {console.log(item.owner.login)}by {item.owner.login}</Text> */}
+        fontVariant: ["small-caps"]}}> by {item.owner.login}</Text>
             </View>
         </View>
         
